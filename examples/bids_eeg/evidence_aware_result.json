@@ -1,0 +1,16 @@
+{
+  "dataset_id": "doi:10.18112/openneuro.ds003810.v2.0.2",
+  "source_sha256": "33ce7952b1d419c5ccdf6e088287b17f4475611ccf32d1218463ed9047492f41",
+  "behavioral_event_count": 68,
+  "specification_hash": "2acb712b8e15b5882e1c452d82767c0a70a19ddcbcd0ce2646ab1ad127f1d1d4",
+  "analysis_artifact_id": "aware-analysis-001",
+  "inference_artifact_id": "aware-inference-001",
+  "finding_artifact_id": "aware-finding-001",
+  "final_content_hash": "729adbe546d3e0f94322ecaa8a5a0dc90b7a36693f51761a5456c408233bb144",
+  "manifest_hash": "d807ddb7ab2e7032665b7bf9e792466ed78fec91472c6241d1499624196c0d70",
+  "execution_identity": "3d4ad93c8ae20ee2bcf441f700ffba5fc2885bb5b8a7bb3038ca216cbacade18",
+  "uncertainty": {
+    "type": "not_estimated",
+    "reason": "V0.8 declares uncertainty without overstating a confidence interval"
+  }
+}

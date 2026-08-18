@@ -24,6 +24,7 @@ class NodeType(StrEnum):
     TRANSFORMATION = "Transformation"
     FEATURE = "Feature"
     ANALYSIS = "Analysis"
+    INFERENCE = "Inference"
     FINDING = "Finding"
 
 
@@ -34,6 +35,7 @@ class EdgeType(StrEnum):
     ASSOCIATED_WITH = "ASSOCIATED_WITH"
     ANALYZED_BY = "ANALYZED_BY"
     SUPPORTS = "SUPPORTS"
+    INFERRED_FROM = "INFERRED_FROM"
 
 
 @dataclass(frozen=True)
@@ -90,7 +92,7 @@ class EvidenceGraph:
             if node_id in supported:
                 continue
             supported.add(node_id)
-            frontier.extend(edge.target for edge in self._edges_from(node_id, {EdgeType.ANALYZED_BY, EdgeType.ASSOCIATED_WITH, EdgeType.RECORDED_DURING, EdgeType.DERIVED_FROM}))
+            frontier.extend(edge.target for edge in self._edges_from(node_id, {EdgeType.ANALYZED_BY, EdgeType.ASSOCIATED_WITH, EdgeType.RECORDED_DURING, EdgeType.DERIVED_FROM, EdgeType.INFERRED_FROM}))
         return supported
 
     def downstream(self, node_id: str) -> set[str]:
@@ -98,13 +100,13 @@ class EvidenceGraph:
         if node_id not in self.nodes:
             raise KeyError(node_id)
         affected: set[str] = set()
-        frontier = [edge.source for edge in self._edges_to(node_id, {EdgeType.DERIVED_FROM, EdgeType.RECORDED_DURING, EdgeType.ASSOCIATED_WITH, EdgeType.ANALYZED_BY})]
+        frontier = [edge.source for edge in self._edges_to(node_id, {EdgeType.DERIVED_FROM, EdgeType.INFERRED_FROM, EdgeType.RECORDED_DURING, EdgeType.ASSOCIATED_WITH, EdgeType.ANALYZED_BY})]
         while frontier:
             current = frontier.pop()
             if current in affected:
                 continue
             affected.add(current)
-            frontier.extend(edge.source for edge in self._edges_to(current, {EdgeType.DERIVED_FROM, EdgeType.RECORDED_DURING, EdgeType.ASSOCIATED_WITH, EdgeType.ANALYZED_BY}))
+            frontier.extend(edge.source for edge in self._edges_to(current, {EdgeType.DERIVED_FROM, EdgeType.INFERRED_FROM, EdgeType.RECORDED_DURING, EdgeType.ASSOCIATED_WITH, EdgeType.ANALYZED_BY}))
             frontier.extend(edge.target for edge in self._edges_from(current, {EdgeType.SUPPORTS}))
         return affected
 
@@ -182,7 +184,7 @@ def project_evidence_graph(catalog: ArtifactCatalog, ontology: NeuroscienceOntol
                 graph.add_edge(finding.finding_id, finding.artifact_id, EdgeType.ASSOCIATED_WITH)
 
     for artifact in catalog.all():
-        artifact_node_type = {"analysis": NodeType.ANALYSIS, "multimodal_inference": NodeType.ANALYSIS, "finding": NodeType.FINDING}.get(artifact.kind, NodeType.ARTIFACT)
+        artifact_node_type = {"analysis": NodeType.ANALYSIS, "evidence_aware_analysis": NodeType.ANALYSIS, "multimodal_inference": NodeType.INFERENCE, "finding": NodeType.FINDING}.get(artifact.kind, NodeType.ARTIFACT)
         graph.add_node(GraphNode(artifact.artifact_id, artifact_node_type, {
             "kind": artifact.kind, "content_hash": artifact.provenance.content_hash,
             "operation": artifact.provenance.operation,
@@ -194,7 +196,8 @@ def project_evidence_graph(catalog: ArtifactCatalog, ontology: NeuroscienceOntol
         graph.add_edge(artifact.artifact_id, transform_id, EdgeType.GENERATED_BY)
         for parent_id in artifact.provenance.parent_artifacts:
             if parent_id in graph.nodes:
-                graph.add_edge(artifact.artifact_id, parent_id, EdgeType.DERIVED_FROM)
+                relation = EdgeType.INFERRED_FROM if artifact.kind == "multimodal_inference" else EdgeType.DERIVED_FROM
+                graph.add_edge(artifact.artifact_id, parent_id, relation)
         metadata = thaw(artifact.metadata)
         for key in ("recording_id", "session_id", "participant_id", "study_id"):
             target = metadata.get(key)

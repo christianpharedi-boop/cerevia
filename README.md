@@ -2,35 +2,28 @@
 
 **Evidence infrastructure for neuroscience.** CEREVIA records a computational path from immutable observations to provisional findings. It is not a replacement for EEG, MRI, behavioral, or physiological analysis libraries; it is the provenance and evidence layer those tools can build upon.
 
-## V0.7 Multimodal Observation
+## V0.8 Evidence-Aware Analysis
 
-CEREVIA now models three independent observational streams: **EEG**, **behavioral events**, and **eye tracking**. Each observation remains independently content-addressed and auditable. Explicit alignment artifacts relate observations only when participant, session, task, and declared timebase context are compatible. Inference artifacts then combine observations and alignments without collapsing them into one opaque dataset.
+CEREVIA now makes the scientific meaning of an analysis executable. An `EvidenceAwareAnalysisSpecification` declares exact input observations and alignments, hypothesis, experimental conditions, comparison, method, parameters, assumptions, output definitions, uncertainty, software environment, and expected outputs.
 
 ```text
-STUDY → PARTICIPANT → SESSION → TASK
-              ┌──────────┼──────────┐
-             EEG      BEHAVIOR   EYE TRACKING
-              └──────────┼──────────┘
-                 ALIGNMENTS / TIMEBASE
-                           ↓
-                   MULTIMODAL INFERENCE
-                           ↓
-                        FINDING
+OBSERVATION → TRANSFORMATION → FEATURE → ALIGNMENT → ANALYSIS → INFERENCE → FINDING
 ```
 
-The V0.7 eye-tracking adapter consumes BIDS `_physio.tsv` or `_physio.tsv.gz` plus JSON sidecars and requires `PhysioType=eyetrack`, declared columns, monotonic timestamps, finite samples, and sampling-frequency-consistent duration. The real proof uses OpenNeuro EEGEyeNet `ds005872` and preserves the eye stream independently. A deliberately incompatible EEG-eye relationship is rejected rather than silently combined. See [`docs/eye-tracking.md`](docs/eye-tracking.md).
+The graph distinguishes `Analysis` from `Inference`. An inference is connected to its declared parents with `INFERRED_FROM` edges, while a finding supports the inference and preserves the complete evidence chain. Execution rejects changed input hashes, disconnected alignments, environment mismatches, incomplete output plans, and missing scientific semantics.
+
+The real V0.8 proof uses OpenNeuro ds003810 EEG and its 68 EDF behavioral events. It declares an alpha-band feature, shared recording-seconds context, descriptive comparison, assumptions, output definition, and a deliberate `not_estimated` uncertainty statement. See [`docs/evidence-aware.md`](docs/evidence-aware.md).
 
 ## Run
 
 ```bash
 cd /home/ubuntu/cerevia
 python3 -m unittest discover -s tests -v
-PYTHONPATH=. python3 examples/eye_tracking/ingest_openneuro.py \
-  /path/to/eye_physio.tsv \
-  /path/to/eye_physio.json
+PYTHONPATH=. python3 examples/bids_eeg/evidence_aware_analysis.py \
+  /path/to/ds003810/sub-02/eeg/sub-02_task-MIvsRest_run-0_eeg.edf
 ```
 
-The real EEGEyeNet proof ingested 161,733 eye-tracking samples at 500 Hz, preserved the source SHA-256, and rejected an incompatible EEG context. Three-stream inference is covered by tests with explicit EEG-behavior and EEG-eye alignment parents.
+The repository also contains the V0.7 three-observation implementation for EEG, behavioral events, and eye tracking. No participant data is copied into this repository.
 
 ## Inherited Earth foundation
 

@@ -13,7 +13,7 @@ def fingerprint(project_root: str | Path | None = None) -> dict[str, str]:
         "numpy_version": "unavailable",
         "os": platform.platform(),
         "architecture": platform.machine(),
-        "cerevia_version": "0.7.0",
+        "cerevia_version": "0.8.0",
     }
     try:
         import numpy
