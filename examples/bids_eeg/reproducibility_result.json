@@ -1,0 +1,20 @@
+{
+  "dataset_id": "doi:10.18112/openneuro.ds003810.v2.0.2",
+  "source_sha256": "33ce7952b1d419c5ccdf6e088287b17f4475611ccf32d1218463ed9047492f41",
+  "recording_id": "rec-02-MIvsRest-run-0",
+  "specification_hash": "f06cdcceaf5ea90dbf51e7c51eaa83353b0afb86c226348b9ac3dcc1468941af",
+  "first_final_content_hash": "24ec64e00fc848a02a1d4e6e25b6542148856a8d6d2ff47eec57da45cf675995",
+  "second_final_content_hash": "24ec64e00fc848a02a1d4e6e25b6542148856a8d6d2ff47eec57da45cf675995",
+  "rerun_identical": true,
+  "first_manifest_hash": "1a71a9c4e2854dc8eb8218825f62bf338aee8b23f3db336d6a80ecb5b4f91834",
+  "second_manifest_hash": "9a40541b272bae680966e097fad064a5e51a419fb93765f38bc80d941ec19962",
+  "execution_identity": "159a34c0bb950e3fcd31631d1f44794bacbd9cb6701ec763c7874a4d4910056f",
+  "output_artifact_ids": [
+    "repro-qc-001",
+    "repro-filter-001",
+    "repro-epoch-001",
+    "repro-alpha-power-001",
+    "repro-analysis-001",
+    "repro-finding-001"
+  ]
+}

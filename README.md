@@ -2,24 +2,24 @@
 
 **Evidence infrastructure for neuroscience.** CEREVIA records a computational path from immutable observations to provisional findings. It is not a replacement for EEG, MRI, behavioral, or physiological analysis libraries; it is the provenance and evidence layer those tools can build upon.
 
-## V0.3 Real-World Interoperability
+## V0.4 Experimental Reproducibility
 
-CEREVIA now speaks the external BIDS EEG organization and metadata standard without attempting to become a BIDS implementation. The new adapter validates `dataset_description.json`, EEG sidecars, channels TSV files, and event files; reads real EDF/BDF signals; binds BIDS participant, session, task, run, modality, channels, and events to the CEREVIA ontology; and emits an immutable evidence artifact with source SHA-256 and BIDS metadata.
+CEREVIA now defines analyses before execution through an executable `AnalysisSpecification`. A specification records exact input artifact IDs and content hashes, the preprocessing pipeline, feature definition, statistical method, parameters, software environment, and expected output IDs.
 
-The first real proof uses OpenNeuro dataset ds003810, version 2.0.2. A real `sub-02_task-MIvsRest_run-0_eeg.edf` was read at 15 channels and 125 Hz. The source dataset remains external and is not committed to this repository.
+The executor refuses mismatched source content or environment metadata and verifies that the declared artifact plan actually ran. It produces both a per-run manifest hash and a timestamp-independent `execution_identity`. Two executions are computationally reproducible when their execution identities match, even though their audit manifests retain distinct execution timestamps.
 
-The V0.2 ontology and V0.1.2 integrity core remain underneath the adapter. CEREVIA continues to enforce immutable artifacts, parent content hashes, environment fingerprints, catalog integrity validation, exact ontology context, and independently hashed manifests.
+The V0.4 proof reruns the declared analysis twice on a real OpenNeuro BIDS EEG recording and obtains the same final content hash and execution identity. See [`docs/reproducibility.md`](docs/reproducibility.md).
 
 ## Run
 
 ```bash
 cd /home/ubuntu/cerevia
 python3 -m unittest discover -s tests -v
-PYTHONPATH=. python3 examples/bids_eeg/ingest_openneuro.py \
+PYTHONPATH=. python3 examples/bids_eeg/reproduce_analysis.py \
   /path/to/ds003810/sub-02/eeg/sub-02_task-MIvsRest_run-0_eeg.edf
 ```
 
-The BIDS interoperability contract is documented in [`docs/bids-eeg.md`](docs/bids-eeg.md). No copied participant data is required in the CEREVIA repository.
+No copied participant data is required in the CEREVIA repository. The external BIDS dataset remains the source of record.
 
 ## Inherited Earth foundation
 
