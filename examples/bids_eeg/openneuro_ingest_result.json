@@ -1,0 +1,15 @@
+{
+  "dataset_id": "doi:10.18112/openneuro.ds003810.v2.0.2",
+  "source": "/home/ubuntu/ds003810/sub-02/eeg/sub-02_task-MIvsRest_run-0_eeg.edf",
+  "source_sha256": "33ce7952b1d419c5ccdf6e088287b17f4475611ccf32d1218463ed9047492f41",
+  "participant_id": "sub-02",
+  "session_id": "ses-01",
+  "recording_id": "rec-02-MIvsRest-run-0",
+  "modality": "EEG",
+  "channels": 15,
+  "events": 0,
+  "sampling_rate_hz": 125.0,
+  "artifact_id": "raw-rec-02-MIvsRest-run-0",
+  "manifest_verified": true,
+  "manifest_hash": "1d153441f1273a5193bd56aeaf63e92fd70bf7c00772ee4a5627e925fadfde7d"
+}

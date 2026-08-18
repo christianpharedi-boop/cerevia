@@ -2,27 +2,24 @@
 
 **Evidence infrastructure for neuroscience.** CEREVIA records a computational path from immutable observations to provisional findings. It is not a replacement for EEG, MRI, behavioral, or physiological analysis libraries; it is the provenance and evidence layer those tools can build upon.
 
-## V0.2 Neuroscience Ontology
+## V0.3 Real-World Interoperability
 
-CEREVIA now has a domain layer that understands the experimental meaning surrounding a signal. The ontology models Study, pseudonymous Participant, Session, Recording, Modality, Channel, Event, Epoch, Feature, Analysis, and Finding. It preserves the context path:
+CEREVIA now speaks the external BIDS EEG organization and metadata standard without attempting to become a BIDS implementation. The new adapter validates `dataset_description.json`, EEG sidecars, channels TSV files, and event files; reads real EDF/BDF signals; binds BIDS participant, session, task, run, modality, channels, and events to the CEREVIA ontology; and emits an immutable evidence artifact with source SHA-256 and BIDS metadata.
 
-```text
-participant + task + condition + event + recording → signal → analysis → finding
-```
+The first real proof uses OpenNeuro dataset ds003810, version 2.0.2. A real `sub-02_task-MIvsRest_run-0_eeg.edf` was read at 15 channels and 125 Hz. The source dataset remains external and is not committed to this repository.
 
-The V0.1.2 evidence core remains underneath and continues to enforce immutable artifacts, parent content hashes, environment fingerprints, catalog integrity validation, and independently hashed manifests. Ontology entities are append-only and require registered parents; EEG ingestion can bind a raw artifact to an ontology Recording and carry its task, condition, modality, and recording ID into provenance metadata.
-
-The ontology contract is documented in [`docs/ontology.md`](docs/ontology.md).
+The V0.2 ontology and V0.1.2 integrity core remain underneath the adapter. CEREVIA continues to enforce immutable artifacts, parent content hashes, environment fingerprints, catalog integrity validation, exact ontology context, and independently hashed manifests.
 
 ## Run
 
 ```bash
 cd /home/ubuntu/cerevia
-python3 examples/eeg_pipeline/run.py
 python3 -m unittest discover -s tests -v
+PYTHONPATH=. python3 examples/bids_eeg/ingest_openneuro.py \
+  /path/to/ds003810/sub-02/eeg/sub-02_task-MIvsRest_run-0_eeg.edf
 ```
 
-The example writes `examples/eeg_pipeline/evidence_manifest.json`. No database, authentication, cloud service, web interface, or AI model is required.
+The BIDS interoperability contract is documented in [`docs/bids-eeg.md`](docs/bids-eeg.md). No copied participant data is required in the CEREVIA repository.
 
 ## Inherited Earth foundation
 

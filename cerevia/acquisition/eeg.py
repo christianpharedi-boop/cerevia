@@ -57,7 +57,7 @@ def validate_observation_metadata(observation: EEGObservation, study_id: str, pa
 
 
 def ingest_eeg(artifact_id: str, observation: EEGObservation, study_id: str, participant_id: str, session_id: str,
-               recording: Recording | None = None) -> Artifact:
+               recording: Recording | None = None, metadata_extra: dict[str, Any] | None = None) -> Artifact:
     validate_observation_metadata(observation, study_id, participant_id, session_id)
     if recording is not None:
         if recording.session_id != session_id or recording.modality.value != "EEG":
@@ -72,5 +72,7 @@ def ingest_eeg(artifact_id: str, observation: EEGObservation, study_id: str, par
     if recording is not None:
         metadata.update({"recording_id": recording.recording_id, "modality": recording.modality.value,
                          "task": recording.task, "condition": recording.condition})
+    if metadata_extra:
+        metadata.update(metadata_extra)
     return Artifact.derive(artifact_id, "raw_eeg", observation.as_payload(), metadata,
                            "ingest_eeg", parameters={"source_type": "EEGObservation", "ontology_bound": recording is not None})
