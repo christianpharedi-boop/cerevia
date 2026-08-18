@@ -98,6 +98,14 @@ V2.2 prepares the first external institutional experiment rather than claiming t
 PYTHONPATH=. python3 examples/pilot/pilot_proof.py
 ```
 
+## External Pilot Readiness
+
+The architecture is now frozen pending external validation. The repository includes a 30-minute quickstart, machine-readable readiness checklist, external result template, and readiness checker. Nine internal acceptance items are complete; **external institutional execution remains pending**. See [`docs/pilot/30-minute-quickstart.md`](docs/pilot/30-minute-quickstart.md) and [`docs/pilot/readiness.json`](docs/pilot/readiness.json).
+
+```bash
+PYTHONPATH=. python3 examples/pilot/check_readiness.py
+```
+
 ## Run
 
 ```bash

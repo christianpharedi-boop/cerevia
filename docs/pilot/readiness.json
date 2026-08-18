@@ -1,0 +1,20 @@
+{
+  "readiness_profile": "CEREVIA External Institutional Pilot",
+  "profile_version": "1.0",
+  "architecture_status": "FROZEN_PENDING_EXTERNAL_VALIDATION",
+  "protocol_change_policy": "Do not change V1.6 semantics during pilot; document deficiencies as a future protocol version.",
+  "checks": [
+    {"id": "fresh_process_verification", "status": "COMPLETE", "evidence": "V1.0-V2.2 regression and fresh-file proofs"},
+    {"id": "external_implementation", "status": "COMPLETE", "evidence": "examples/external_impl/standalone_protocol.py"},
+    {"id": "cross_domain_exchange", "status": "COMPLETE", "evidence": "V1.5 cross-domain proof"},
+    {"id": "signed_institutional_package", "status": "COMPLETE", "evidence": "V2.1 institutional exchange proof"},
+    {"id": "key_rotation", "status": "COMPLETE", "evidence": "V2.1 retired-key rejection proof"},
+    {"id": "revocation", "status": "COMPLETE", "evidence": "Sentinel and Observatory selective impact proofs"},
+    {"id": "privacy_boundary", "status": "COMPLETE", "evidence": "Out-of-band bundle locator and no-inline-payload assertion"},
+    {"id": "adversarial_fixtures", "status": "COMPLETE", "evidence": "V2.2 altered hash, stale revocation, and wrong recipient scenarios"},
+    {"id": "independent_answer_schema", "status": "COMPLETE", "evidence": "BlindExchangeAnswer and AgreementReport"},
+    {"id": "external_institution", "status": "PENDING_EXTERNAL", "evidence": "No independent institution has executed the pilot in this repository"}
+  ],
+  "external_validation_required": true,
+  "claims_of_external_use_permitted": false
+}

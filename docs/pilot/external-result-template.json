@@ -1,0 +1,29 @@
+{
+  "pilot_id": "replace-with-coordinator-id",
+  "participant_institution": "replace-with-independent-institution",
+  "operator": "replace-with-operator-or-team",
+  "execution_environment": {
+    "os": "",
+    "runtime": "",
+    "implementation": "",
+    "commit_or_release": ""
+  },
+  "independence_statement": "The participant did not receive privileged access to CEREVIA development reasoning or private implementation guidance.",
+  "scenarios": {
+    "valid": {"package_authentic": null, "bundle_verified": null, "lineage_node_ids": [], "claim_statement": null, "uncertainty": {}, "historical_event_count": null, "revoked_source_ids": [], "affected_finding_ids": [], "unaffected_finding_ids": [], "failures": []},
+    "altered_bundle_hash": {"package_authentic": null, "bundle_verified": null, "failures": []},
+    "stale_revocation": {"package_authentic": null, "bundle_verified": null, "failures": []},
+    "wrong_recipient": {"package_authentic": null, "bundle_verified": null, "failures": []}
+  },
+  "agreement": {
+    "compared_with": "reference-or-second-institution-result-id",
+    "agreement": null,
+    "disagreements": {}
+  },
+  "data_governance": {
+    "sensitive_payloads_embedded_in_exchange_envelope": false,
+    "out_of_band_evidence_governed_locally": true,
+    "retention_policy_reference": ""
+  },
+  "external_validation_status": "PENDING_REVIEW"
+}
