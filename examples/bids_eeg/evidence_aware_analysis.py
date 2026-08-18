@@ -51,7 +51,7 @@ def main(path: str) -> None:
     )
     result = execute_evidence_aware_analysis(specification, catalog, "ds003810")
     manifest = evidence_manifest("ds003810", catalog.get(result.finding_artifact_id), catalog)
-    bundle = build_bundle(manifest, specification.to_dict(), specification.specification_hash, catalog)
+    bundle = build_bundle(manifest, specification.to_dict(), specification.specification_hash, catalog, result.execution_identity)
     bundle_path = Path(__file__).with_name("verification_bundle.json")
     write_bundle(bundle, bundle_path)
     verification = verify_bundle(bundle)

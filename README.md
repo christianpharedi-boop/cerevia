@@ -18,6 +18,10 @@ A fresh verification process independently checks manifest integrity, specificat
 
 V1.0 freezes the Evidence Core primitives—immutable artifacts, content identities, provenance, ontology context, interoperability, reproducible execution, evidence graphs, multimodal alignment, inference, claims, uncertainty, and independent verification. Future domain adapters and extensions should preserve this boundary. See [`docs/evidence-core-v1.md`](docs/evidence-core-v1.md).
 
+## V1.1 Sentinel
+
+CEREVIA Sentinel is the defensive layer above the core. It runs adversarial attack suites, supports Ed25519 verification attestations, maintains an append-only hash-linked transparency log, and propagates source revocation through dependent analyses, claims, and findings. It makes silent change difficult and detected compromise visible; it does not claim scientific truth. See [`docs/sentinel.md`](docs/sentinel.md).
+
 ## Run
 
 ```bash

@@ -10,3 +10,4 @@ dist/
 
 # Locally generated real-data verification bundle
 examples/bids_eeg/verification_bundle.json
+examples/bids_eeg/sentinel_result.json

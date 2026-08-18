@@ -24,12 +24,12 @@ class VerificationReport:
 
 
 def build_bundle(manifest: dict[str, Any], specification: dict[str, Any],
-                 specification_hash: str, catalog: ArtifactCatalog) -> dict[str, Any]:
+                 specification_hash: str, catalog: ArtifactCatalog, execution_identity: str | None = None) -> dict[str, Any]:
     artifacts = [artifact.to_dict(include_payload=True) for artifact in catalog.all()]
     return {"bundle_type": "CEREVIA INDEPENDENT VERIFICATION BUNDLE",
             "bundle_version": "1.0.0", "manifest": manifest,
             "specification": specification, "specification_hash": specification_hash,
-            "artifacts": artifacts}
+            "execution_identity": execution_identity, "artifacts": artifacts}
 
 
 def write_bundle(bundle: dict[str, Any], path: str | Path) -> None:
@@ -125,6 +125,20 @@ def verify_bundle(bundle: dict[str, Any]) -> VerificationReport:
                 checks.append("claim_uncertainty")
             if claim_payload.get("claim_status") not in {"QUALIFIED", "PROVISIONAL"}:
                 failures.append("claim status is not qualified or provisional")
+    final_record = by_id.get(final_id) if final_id else None
+    claim_record = by_id.get(final_record.get("payload", {}).get("analysis_id")) if final_record else None
+    inference_record = by_id.get(claim_record.get("payload", {}).get("inference_id")) if claim_record else None
+    analysis_id = inference_record.get("payload", {}).get("analysis_id") if inference_record else None
+    if final_record and claim_record and inference_record and analysis_id:
+        expected_execution = hash_object({"specification_hash": bundle.get("specification_hash"),
+                                          "analysis_id": analysis_id, "inference_id": inference_record.get("artifact_id"),
+                                          "finding_id": final_id, "final_content_hash": final_record.get("provenance", {}).get("content_hash")})
+        if bundle.get("execution_identity") != expected_execution:
+            failures.append("execution identity mismatch")
+        else:
+            checks.append("execution_identity")
+    else:
+        failures.append("execution identity chain is incomplete")
     graph = manifest.get("evidence_graph")
     if manifest.get("evidence_graph_hash") != hash_object(graph):
         failures.append("evidence graph hash mismatch")
