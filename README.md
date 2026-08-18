@@ -98,6 +98,16 @@ V2.2 prepares the first external institutional experiment rather than claiming t
 PYTHONPATH=. python3 examples/pilot/pilot_proof.py
 ```
 
+## Protocol API
+
+The thin Protocol API exposes the frozen Evidence Core, Sentinel, and Observatory contracts through read-mostly HTTP routes. It verifies transient bundles and queries configured out-of-band bundles without accounts, mutable storage, or scientific-data custody. The Institutional Exchange API remains a separate later boundary. See [`docs/protocol-api-v2.3.md`](docs/protocol-api-v2.3.md).
+
+```bash
+pip install -e '.[api]'
+export CEREVIA_BUNDLE_PATH=examples/cross_domain/cross_domain_bundle.json
+uvicorn cerevia.api:app --host 127.0.0.1 --port 8000
+```
+
 ## External Pilot Readiness
 
 The architecture is now frozen pending external validation. The repository includes a 30-minute quickstart, machine-readable readiness checklist, external result template, and readiness checker. Nine internal acceptance items are complete; **external institutional execution remains pending**. See [`docs/pilot/30-minute-quickstart.md`](docs/pilot/30-minute-quickstart.md) and [`docs/pilot/readiness.json`](docs/pilot/readiness.json).

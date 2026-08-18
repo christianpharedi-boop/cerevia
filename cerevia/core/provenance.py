@@ -20,7 +20,7 @@ class Provenance:
 
     @classmethod
     def create(cls, artifact_id: str, parent_artifacts: tuple[str, ...], operation: str,
-               parameters: dict[str, Any], content_hash: str, software_version: str = "2.2.1",
+               parameters: dict[str, Any], content_hash: str, software_version: str = "2.3.0",
                creator: str = "cerevia", environment: dict[str, str] | None = None) -> "Provenance":
         if environment is None:
             from .environment import fingerprint
@@ -53,7 +53,7 @@ class Artifact:
     @classmethod
     def derive(cls, artifact_id: str, kind: str, payload: Any, metadata: dict[str, Any],
                operation: str, parents: tuple["Artifact", ...] = (), parameters: dict[str, Any] | None = None,
-               environment: dict[str, str] | None = None, software_version: str = "2.2.1") -> "Artifact":
+               environment: dict[str, str] | None = None, software_version: str = "2.3.0") -> "Artifact":
         from .environment import fingerprint
         immutable_payload = freeze(payload)
         immutable_metadata = freeze(metadata)
