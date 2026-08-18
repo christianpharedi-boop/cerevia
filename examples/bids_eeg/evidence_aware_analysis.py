@@ -6,10 +6,11 @@ import sys
 
 from cerevia.acquisition.bids import load_bids_eeg_run, ingest_bids_eeg
 from cerevia.analysis.evidence_aware import EvidenceAwareAnalysisSpecification, execute_evidence_aware_analysis
+from cerevia.verification.bundle import build_bundle, write_bundle, verify_bundle
 from cerevia.core.artifacts import ArtifactCatalog
 from cerevia.core.environment import fingerprint
 from cerevia.multimodal.evidence import align_behavioral_events, extract_edf_behavioral_events, ingest_behavioral_events
-from cerevia.pipeline import epoch_eeg, filter_eeg, qc_eeg, spectral_power
+from cerevia.pipeline import epoch_eeg, filter_eeg, qc_eeg, spectral_power, evidence_manifest
 from cerevia.study.ontology import NeuroscienceOntology, Participant, Session, Study
 
 
@@ -49,12 +50,18 @@ def main(path: str) -> None:
         expected_outputs=("aware-analysis-001", "aware-inference-001", "aware-claim-001", "aware-finding-001"),
     )
     result = execute_evidence_aware_analysis(specification, catalog, "ds003810")
+    manifest = evidence_manifest("ds003810", catalog.get(result.finding_artifact_id), catalog)
+    bundle = build_bundle(manifest, specification.to_dict(), specification.specification_hash, catalog)
+    bundle_path = Path(__file__).with_name("verification_bundle.json")
+    write_bundle(bundle, bundle_path)
+    verification = verify_bundle(bundle)
     output = {"dataset_id": run.dataset_id, "source_sha256": run.source_sha256, "behavioral_event_count": len(events),
               "specification_hash": result.specification_hash, "analysis_artifact_id": result.analysis_artifact_id,
               "inference_artifact_id": result.inference_artifact_id, "claim_artifact_id": result.claim_artifact_id,
               "finding_artifact_id": result.finding_artifact_id,
               "final_content_hash": result.final_content_hash, "manifest_hash": result.manifest_hash,
-              "execution_identity": result.execution_identity,
+              "execution_identity": result.execution_identity, "bundle_path": str(bundle_path),
+              "independent_verification": verification.to_dict(),
               "uncertainty": specification.to_dict()["uncertainty"]}
     Path(__file__).with_name("evidence_aware_result.json").write_text(json.dumps(output, indent=2), encoding="utf-8")
     print(json.dumps(output, indent=2))

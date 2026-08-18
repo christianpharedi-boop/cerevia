@@ -7,3 +7,6 @@ venv/
 *.egg-info/
 build/
 dist/
+
+# Locally generated real-data verification bundle
+examples/bids_eeg/verification_bundle.json

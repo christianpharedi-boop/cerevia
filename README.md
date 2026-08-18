@@ -1,18 +1,18 @@
 # CEREVIA
 
-**Evidence infrastructure for neuroscience.** CEREVIA records a computational path from immutable observations to provisional findings. It is not a replacement for EEG, MRI, behavioral, or physiological analysis libraries; it is the provenance and evidence layer those tools can build upon.
+**Evidence infrastructure for neuroscience.** CEREVIA records a computational path from immutable observations to independently verifiable scientific claims. It is not a replacement for EEG, MRI, behavioral, or physiological analysis libraries; it is the provenance and evidence layer those tools can build upon.
 
-## V0.9 Claim Validation
+## V1.0 Independent Verification
 
-CEREVIA now distinguishes a **computed result** from a **scientific claim**. A result is a value produced by a declared method. A claim is a qualified statement that may be created only after its inference, exact supporting evidence, assumptions, uncertainty, method, hypothesis, and experimental context have been validated.
+CEREVIA V1.0 answers a focused question: **Can an independent researcher verify the evidence-to-claim chain without access to the original in-memory execution state?**
+
+The project exports a self-contained verification bundle containing the evidence manifest, full serialized artifact catalog, analysis specification, specification hash, and evidence graph.
 
 ```text
-OBSERVATION → TRANSFORMATION → FEATURE → ALIGNMENT → ANALYSIS → INFERENCE → CLAIM → FINDING
+source → artifacts → graph → analysis → inference → claim → finding
 ```
 
-Claim validation rejects missing evidence, invalid or disconnected inference, broken evidence content hashes, missing assumptions, missing uncertainty, missing context, and missing method. An explicit `not_estimated` uncertainty declaration yields a `QUALIFIED` claim rather than a false appearance of certainty. CEREVIA does not decide that a hypothesis is true; it verifies that a declared claim follows from declared computations under declared assumptions. See [`docs/claim-validation.md`](docs/claim-validation.md).
-
-The real V0.9 proof uses OpenNeuro ds003810 EEG and its 68 EDF behavioral events. It produces separate analysis, inference, claim, and finding artifacts and preserves the computed result independently inside the claim artifact.
+A fresh verification process independently checks manifest integrity, specification identity, every artifact content hash, ancestor closure, evidence hashes, claim/inference/finding roles, uncertainty declaration, and graph hash. A valid chain returns `VERIFIED`; corruption returns `INVESTIGATE` with diagnostic failures. See [`docs/independent-verification.md`](docs/independent-verification.md).
 
 ## Run
 
@@ -21,9 +21,13 @@ cd /home/ubuntu/cerevia
 python3 -m unittest discover -s tests -v
 PYTHONPATH=. python3 examples/bids_eeg/evidence_aware_analysis.py \
   /path/to/ds003810/sub-02/eeg/sub-02_task-MIvsRest_run-0_eeg.edf
+PYTHONPATH=. python3 examples/bids_eeg/verify_bundle.py \
+  examples/bids_eeg/verification_bundle.json
 ```
 
-The repository also contains the V0.7 three-observation implementation for EEG, behavioral events, and eye tracking. No participant data is copied into this repository.
+The real V1.0 proof uses OpenNeuro ds003810 EEG and its 68 EDF behavioral events. It exports the qualified claim chain and verifies it in a fresh Python process. Tests then corrupt an upstream payload, claim statement, and manifest to confirm that independent verification fails explicitly.
+
+The repository also contains the V0.7 three-observation implementation for EEG, behavioral events, and eye tracking, plus V0.8 evidence-aware analysis and V0.9 claim validation. No participant data is copied into this repository.
 
 ## Inherited Earth foundation
 
