@@ -82,6 +82,14 @@ python3 examples/external_impl/standalone_protocol.py verify examples/external_i
 PYTHONPATH=. python3 examples/bids_eeg/verify_bundle.py examples/external_impl/external_bundle.json
 ```
 
+## V2.1 Institutional Exchange Profile
+
+V2.1 defines the operational boundary for institution-to-institution exchange: signed package envelopes, signer identity and key rotation, retention and access policy, revocation snapshots, append-only audit history, and out-of-band evidence locations. The trust envelope never copies sensitive scientific payloads merely because it can. See [`docs/institutional-exchange-v2.1.md`](docs/institutional-exchange-v2.1.md).
+
+```bash
+PYTHONPATH=. python3 examples/institutional_exchange/institutional_exchange_proof.py
+```
+
 ## Run
 
 ```bash

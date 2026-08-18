@@ -28,3 +28,7 @@ examples/conformance/conformance_cross_domain_bundle.json
 
 # Locally generated V2.0 external implementation bundle
 examples/external_impl/external_bundle.json
+
+# Locally generated V2.1 institutional exchange artifacts
+examples/institutional_exchange/exchange_package.json
+examples/institutional_exchange/audit_log.json
