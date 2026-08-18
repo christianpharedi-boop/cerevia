@@ -31,3 +31,7 @@ PYTHONPATH=. python3 examples/cross_domain/cross_domain_proof.py
 ```
 
 The generated cross-domain bundle is a local proof artifact and is ignored by Git. Its source domain bundles remain independently verifiable inputs.
+
+## References
+
+[1]: https://earthquake.usgs.gov/fdsnws/event/1/ "USGS Earthquake Catalog FDSN Event Web Service API Documentation"
