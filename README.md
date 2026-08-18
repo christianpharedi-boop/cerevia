@@ -64,6 +64,14 @@ V1.5 composes independently verified neuroscience, proteomics, and Earth/Space f
 PYTHONPATH=. python3 examples/cross_domain/cross_domain_proof.py
 ```
 
+## V1.6 Evidence Interoperability Specification
+
+V1.6 freezes the smallest universal contract for a CEREVIA-compatible evidence producer: evidence identity, complete lineage, independent serialized verification, computable invalidation, and qualified claims. Each adapter declares an `EvidenceInteroperabilityProfile`; the reusable conformance suite validates neuroscience, proteomics, Earth/Space, and their cross-domain composition. See [`docs/evidence-interoperability-v1.md`](docs/evidence-interoperability-v1.md).
+
+```bash
+PYTHONPATH=. python3 examples/conformance/conformance_proof.py
+```
+
 ## Run
 
 ```bash
@@ -81,6 +89,7 @@ PYTHONPATH=. python3 examples/proteomics/proteomics_proof.py \
 PYTHONPATH=. python3 examples/earthspace/earthspace_proof.py \
   examples/earthspace/data/usgs_earthquakes_2024-01-01_m5.json
 PYTHONPATH=. python3 examples/cross_domain/cross_domain_proof.py
+PYTHONPATH=. python3 examples/conformance/conformance_proof.py
 ```
 
 The real V1.0 proof uses OpenNeuro ds003810 EEG and its 68 EDF behavioral events. It exports the qualified claim chain and verifies it in a fresh Python process. Tests then corrupt an upstream payload, claim statement, and manifest to confirm that independent verification fails explicitly.
