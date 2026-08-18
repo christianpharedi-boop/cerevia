@@ -14,6 +14,10 @@ source → artifacts → graph → analysis → inference → claim → finding
 
 A fresh verification process independently checks manifest integrity, specification identity, every artifact content hash, ancestor closure, evidence hashes, claim/inference/finding roles, uncertainty declaration, and graph hash. A valid chain returns `VERIFIED`; corruption returns `INVESTIGATE` with diagnostic failures. See [`docs/independent-verification.md`](docs/independent-verification.md).
 
+> **Verification of computation is not verification of truth.** CEREVIA verifies that a serialized evidence-to-claim chain is internally intact and that a qualified claim follows from declared computations under declared assumptions. It does not decide that the scientific hypothesis is true.
+
+V1.0 freezes the Evidence Core primitives—immutable artifacts, content identities, provenance, ontology context, interoperability, reproducible execution, evidence graphs, multimodal alignment, inference, claims, uncertainty, and independent verification. Future domain adapters and extensions should preserve this boundary. See [`docs/evidence-core-v1.md`](docs/evidence-core-v1.md).
+
 ## Run
 
 ```bash
