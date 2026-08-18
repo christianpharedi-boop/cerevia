@@ -15,3 +15,7 @@ examples/bids_eeg/sentinel_result.json
 # Locally generated V1.3 proteomics proof outputs
 examples/proteomics/proteomics_bundle.json
 examples/proteomics/proteomics_sentinel.json
+
+# Locally generated V1.4 Earth/Space proof outputs
+examples/earthspace/earthspace_bundle.json
+examples/earthspace/earthspace_sentinel.json

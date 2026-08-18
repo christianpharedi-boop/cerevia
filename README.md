@@ -41,8 +41,19 @@ V1.3 tests whether the exact Evidence Core, Sentinel, and Observatory trust sema
 The transplant proof uses the same 13 adversarial Sentinel attacks and the same Observatory `impact_of()` query used for neuroscience:
 
 ```bash
-PYTHONPATH=. python3 examples/proteomics/proteomics_proof.py \\
+PYTHONPATH=. python3 examples/proteomics/proteomics_proof.py \
   examples/proteomics/data/hela_proteins_subset.csv
+```
+
+## V1.4 Earth/Space Domain Transplant
+
+V1.4 tests the same trust architecture against spatial-temporal observations and derived products. The Earth/Space adapter understands USGS GeoJSON earthquake observations, coordinate/time normalization, and a descriptive event-cluster product; it does not create a second provenance or verification system. See [`docs/earthspace-v1.4.md`](docs/earthspace-v1.4.md).
+
+The proof uses the same 13 adversarial Sentinel attacks and the same Observatory `impact_of()` query as neuroscience and proteomics:
+
+```bash
+PYTHONPATH=. python3 examples/earthspace/earthspace_proof.py \
+  examples/earthspace/data/usgs_earthquakes_2024-01-01_m5.json
 ```
 
 ## Run
@@ -59,6 +70,8 @@ PYTHONPATH=. python3 examples/bids_eeg/observatory_query.py \
   --sentinel examples/bids_eeg/sentinel_result.json
 PYTHONPATH=. python3 examples/proteomics/proteomics_proof.py \
   examples/proteomics/data/hela_proteins_subset.csv
+PYTHONPATH=. python3 examples/earthspace/earthspace_proof.py \
+  examples/earthspace/data/usgs_earthquakes_2024-01-01_m5.json
 ```
 
 The real V1.0 proof uses OpenNeuro ds003810 EEG and its 68 EDF behavioral events. It exports the qualified claim chain and verifies it in a fresh Python process. Tests then corrupt an upstream payload, claim statement, and manifest to confirm that independent verification fails explicitly.
