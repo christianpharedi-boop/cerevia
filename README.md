@@ -2,13 +2,13 @@
 
 **Evidence infrastructure for neuroscience.** CEREVIA records a computational path from immutable observations to provisional findings. It is not a replacement for EEG, MRI, behavioral, or physiological analysis libraries; it is the provenance and evidence layer those tools can build upon.
 
-## V0.4 Experimental Reproducibility
+## V0.5 Evidence Graph
 
-CEREVIA now defines analyses before execution through an executable `AnalysisSpecification`. A specification records exact input artifact IDs and content hashes, the preprocessing pipeline, feature definition, statistical method, parameters, software environment, and expected output IDs.
+CEREVIA now projects its artifact lineage and neuroscience ontology into a pure computational evidence graph. The graph models Study, Participant, Session, Recording, Event, Artifact, Transformation, Feature, Analysis, and Finding nodes connected by `GENERATED_BY`, `DERIVED_FROM`, `RECORDED_DURING`, `ASSOCIATED_WITH`, `ANALYZED_BY`, and `SUPPORTS` edges.
 
-The executor refuses mismatched source content or environment metadata and verifies that the declared artifact plan actually ran. It produces both a per-run manifest hash and a timestamp-independent `execution_identity`. Two executions are computationally reproducible when their execution identities match, even though their audit manifests retain distinct execution timestamps.
+The graph answers questions such as which evidence supports a finding, which findings depend on a recording, and what downstream evidence would be affected if a preprocessing artifact were invalidated. It is an in-memory model with no GUI, database, cloud service, or AI dependency. See [`docs/evidence-graph.md`](docs/evidence-graph.md).
 
-The V0.4 proof reruns the declared analysis twice on a real OpenNeuro BIDS EEG recording and obtains the same final content hash and execution identity. See [`docs/reproducibility.md`](docs/reproducibility.md).
+Evidence manifests now include a deterministic graph representation and `evidence_graph_hash` alongside the existing audit manifest hash. The artifact catalog remains authoritative for content identity and integrity validation.
 
 ## Run
 
@@ -19,7 +19,7 @@ PYTHONPATH=. python3 examples/bids_eeg/reproduce_analysis.py \
   /path/to/ds003810/sub-02/eeg/sub-02_task-MIvsRest_run-0_eeg.edf
 ```
 
-No copied participant data is required in the CEREVIA repository. The external BIDS dataset remains the source of record.
+The V0.5 example runs the reproducible real-data analysis, projects the result into an evidence graph, and reports support and invalidation coverage. No copied participant data is required in the repository.
 
 ## Inherited Earth foundation
 

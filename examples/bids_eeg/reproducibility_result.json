@@ -2,13 +2,13 @@
   "dataset_id": "doi:10.18112/openneuro.ds003810.v2.0.2",
   "source_sha256": "33ce7952b1d419c5ccdf6e088287b17f4475611ccf32d1218463ed9047492f41",
   "recording_id": "rec-02-MIvsRest-run-0",
-  "specification_hash": "f06cdcceaf5ea90dbf51e7c51eaa83353b0afb86c226348b9ac3dcc1468941af",
-  "first_final_content_hash": "24ec64e00fc848a02a1d4e6e25b6542148856a8d6d2ff47eec57da45cf675995",
-  "second_final_content_hash": "24ec64e00fc848a02a1d4e6e25b6542148856a8d6d2ff47eec57da45cf675995",
+  "specification_hash": "13db22ad1366bdedf05bca5c5b0e7b9937c0d3bee4a72970fa698373cab25817",
+  "first_final_content_hash": "59738d8a21be830f57260028e2436cf7b2825708ed10884b43af2ccae00d2043",
+  "second_final_content_hash": "59738d8a21be830f57260028e2436cf7b2825708ed10884b43af2ccae00d2043",
   "rerun_identical": true,
-  "first_manifest_hash": "1a71a9c4e2854dc8eb8218825f62bf338aee8b23f3db336d6a80ecb5b4f91834",
-  "second_manifest_hash": "9a40541b272bae680966e097fad064a5e51a419fb93765f38bc80d941ec19962",
-  "execution_identity": "159a34c0bb950e3fcd31631d1f44794bacbd9cb6701ec763c7874a4d4910056f",
+  "first_manifest_hash": "654f2efb9bac6399cfe61ca7abeae5be1e096e589a1af3cad5f0ef6772f63589",
+  "second_manifest_hash": "135c79a299e0d9599e240fd8e6220141b48dcdcfc52a614e299cc1de6048860b",
+  "execution_identity": "6e22366bbf74009bfe1855f3b7de7c5ff6364b1bf56c714b23a0b33ed523e927",
   "output_artifact_ids": [
     "repro-qc-001",
     "repro-filter-001",
@@ -16,5 +16,10 @@
     "repro-alpha-power-001",
     "repro-analysis-001",
     "repro-finding-001"
-  ]
+  ],
+  "graph_hash": "a60a54694df5de56e881b812fcdc9a7ef4db06465e3d57b2f243e196ee883b97",
+  "graph_node_count": 14,
+  "graph_edge_count": 25,
+  "supported_evidence_node_count": 6,
+  "invalidation_node_count": 7
 }

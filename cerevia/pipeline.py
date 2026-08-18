@@ -117,12 +117,15 @@ def finding(analysis: Artifact, evidence: tuple[Artifact, ...], artifact_id: str
                            "record_finding", (analysis,) + evidence, {"claim_policy": "computation_does_not_auto_convert_to_truth"})
 
 
-def evidence_manifest(study_id: str, final: Artifact, catalog: ArtifactCatalog) -> dict[str, Any]:
+def evidence_manifest(study_id: str, final: Artifact, catalog: ArtifactCatalog, ontology: Any | None = None) -> dict[str, Any]:
     chain = catalog.lineage(final.artifact_id)
-    manifest = {"manifest_type": "CEREVIA EVIDENCE MANIFEST", "manifest_version": "0.4.0", "study_id": study_id,
+    manifest = {"manifest_type": "CEREVIA EVIDENCE MANIFEST", "manifest_version": "0.5.0", "study_id": study_id,
                 "final_finding_id": final.artifact_id, "artifact_count": len(chain),
                 "artifacts": [a.to_dict(include_payload=False) for a in chain],
                 "provenance_chain": [a.artifact_id for a in chain], "content_hash": final.provenance.content_hash}
+    from cerevia.graph.evidence import project_evidence_graph
+    manifest["evidence_graph"] = project_evidence_graph(catalog, ontology).to_dict()
+    manifest["evidence_graph_hash"] = hash_object(manifest["evidence_graph"])
     manifest["manifest_hash"] = hash_object(manifest)
     return manifest
 
