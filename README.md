@@ -2,34 +2,35 @@
 
 **Evidence infrastructure for neuroscience.** CEREVIA records a computational path from immutable observations to provisional findings. It is not a replacement for EEG, MRI, behavioral, or physiological analysis libraries; it is the provenance and evidence layer those tools can build upon.
 
-## V0.6.1 Alignment Integrity
+## V0.7 Multimodal Observation
 
-CEREVIA now hardens the EEG-plus-behavioral boundary. Alignment requires exact agreement on pseudonymous participant, session, and task context, and the raw EEG artifact is an exact alignment parent. Negative or out-of-range event onsets, invalid tolerances, missing recording duration, missing participant context, and changed parent identities are rejected or produce different alignment identities.
-
-The alignment semantics are explicit: this release performs validated recording-timebase mapping, not independent event-detector matching. Each behavioral EDF annotation is deterministically mapped to `round(onset_seconds × sampling_rate_hz)` after bounds validation.
-
-The multimodal chain remains:
+CEREVIA now models three independent observational streams: **EEG**, **behavioral events**, and **eye tracking**. Each observation remains independently content-addressed and auditable. Explicit alignment artifacts relate observations only when participant, session, task, and declared timebase context are compatible. Inference artifacts then combine observations and alignments without collapsing them into one opaque dataset.
 
 ```text
-EEG raw → QC → filter → epochs → alpha power ─┐
-                                               ├→ multimodal analysis → finding
-EDF annotations → behavioral events → alignment ─┘
+STUDY → PARTICIPANT → SESSION → TASK
+              ┌──────────┼──────────┐
+             EEG      BEHAVIOR   EYE TRACKING
+              └──────────┼──────────┘
+                 ALIGNMENTS / TIMEBASE
+                           ↓
+                   MULTIMODAL INFERENCE
+                           ↓
+                        FINDING
 ```
 
-The evidence graph identifies the final finding as dependent on behavioral evidence. See [`docs/multimodal.md`](docs/multimodal.md).
+The V0.7 eye-tracking adapter consumes BIDS `_physio.tsv` or `_physio.tsv.gz` plus JSON sidecars and requires `PhysioType=eyetrack`, declared columns, monotonic timestamps, finite samples, and sampling-frequency-consistent duration. The real proof uses OpenNeuro EEGEyeNet `ds005872` and preserves the eye stream independently. A deliberately incompatible EEG-eye relationship is rejected rather than silently combined. See [`docs/eye-tracking.md`](docs/eye-tracking.md).
 
 ## Run
 
 ```bash
 cd /home/ubuntu/cerevia
 python3 -m unittest discover -s tests -v
-PYTHONPATH=. python3 examples/bids_eeg/multimodal_analysis.py \
-  /path/to/ds003810/sub-02/eeg/sub-02_task-MIvsRest_run-0_eeg.edf
+PYTHONPATH=. python3 examples/eye_tracking/ingest_openneuro.py \
+  /path/to/eye_physio.tsv \
+  /path/to/eye_physio.json
 ```
 
-The real OpenNeuro proof validates and maps 68 EDF annotations, verifies the manifest, and exports the multimodal evidence graph. No participant data is copied into this repository.
-
-This release deliberately remains limited to EEG plus behavioral events; it does not add eye tracking, MRI, MEG, a GUI, a database, or an AI layer.
+The real EEGEyeNet proof ingested 161,733 eye-tracking samples at 500 Hz, preserved the source SHA-256, and rejected an incompatible EEG context. Three-stream inference is covered by tests with explicit EEG-behavior and EEG-eye alignment parents.
 
 ## Inherited Earth foundation
 

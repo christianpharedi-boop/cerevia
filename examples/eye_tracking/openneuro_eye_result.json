@@ -1,0 +1,20 @@
+{
+  "dataset_id": "doi:10.18112/openneuro.ds005872.v1.0.0",
+  "participant_id": "sub-EP10",
+  "session_id": "ses-01",
+  "task": "dots",
+  "recording_id": "eye-EP10-dots-recording-eye1",
+  "source_sha256": "6d9af4c2f3a68fe783f3b5c7d6d6a889755a4d6932586d716124cc2505605db1",
+  "sample_count": 161733,
+  "sampling_frequency_hz": 500.0,
+  "duration_seconds": 323.464,
+  "columns": [
+    "time",
+    "L-GAZE-X",
+    "L-GAZE-Y"
+  ],
+  "eye_artifact_id": "eye-observation-001",
+  "eye_content_hash": "da9d423ddf837ede29373cf54b1012ef4bd2f3b3f1d1a329615eee7faa848be7",
+  "independent_observation": true,
+  "incompatible_alignment_rejected": "EEG and eye-tracking context mismatch: {'participant_id': ('sub-02', 'sub-EP10'), 'task': ('MIvsRest', 'dots')}"
+}

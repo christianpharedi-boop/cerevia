@@ -182,7 +182,7 @@ def project_evidence_graph(catalog: ArtifactCatalog, ontology: NeuroscienceOntol
                 graph.add_edge(finding.finding_id, finding.artifact_id, EdgeType.ASSOCIATED_WITH)
 
     for artifact in catalog.all():
-        artifact_node_type = {"analysis": NodeType.ANALYSIS, "finding": NodeType.FINDING}.get(artifact.kind, NodeType.ARTIFACT)
+        artifact_node_type = {"analysis": NodeType.ANALYSIS, "multimodal_inference": NodeType.ANALYSIS, "finding": NodeType.FINDING}.get(artifact.kind, NodeType.ARTIFACT)
         graph.add_node(GraphNode(artifact.artifact_id, artifact_node_type, {
             "kind": artifact.kind, "content_hash": artifact.provenance.content_hash,
             "operation": artifact.provenance.operation,
