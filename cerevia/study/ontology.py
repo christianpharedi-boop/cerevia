@@ -104,6 +104,8 @@ class Recording:
     task: str = ""
     condition: str = ""
     source_format: str = ""
+    participant_id: str = ""
+    duration_seconds: float | None = None
 
     def __post_init__(self) -> None:
         _require_id(self.recording_id, "recording_id")
@@ -115,6 +117,10 @@ class Recording:
             raise ValueError("recording channel IDs must be unique")
         if self.sampling_rate_hz is not None and (not math.isfinite(self.sampling_rate_hz) or self.sampling_rate_hz <= 0):
             raise ValueError("sampling_rate_hz must be finite and positive")
+        if self.participant_id and not _SUBJECT_ID.fullmatch(self.participant_id):
+            raise ValueError("recording participant_id must be pseudonymous")
+        if self.duration_seconds is not None and (not math.isfinite(self.duration_seconds) or self.duration_seconds <= 0):
+            raise ValueError("duration_seconds must be finite and positive")
 
 
 @dataclass(frozen=True)

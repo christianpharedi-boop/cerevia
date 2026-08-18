@@ -47,7 +47,9 @@ class CrossModalAlignment:
     task: str
     eeg_recording_id: str
     behavioral_artifact_id: str
+    eeg_artifact_id: str
     matched_event_ids: tuple[str, ...]
+    event_sample_map: tuple[tuple[str, int], ...]
     tolerance_seconds: float
     timebase: str = "recording_seconds"
 
@@ -103,28 +105,55 @@ def ingest_behavioral_events(artifact_id: str, events: Iterable[BehavioralEvent]
 
 
 def align_behavioral_events(artifact_id: str, recording: Recording, behavioral_artifact: Artifact,
-                            tolerance_seconds: float = 0.020) -> tuple[Artifact, CrossModalAlignment]:
+                            eeg_artifact: Artifact | None = None, tolerance_seconds: float = 0.020) -> tuple[Artifact, CrossModalAlignment]:
     if behavioral_artifact.kind != "behavioral_events":
         raise ValueError("alignment requires behavioral_events artifact")
+    if eeg_artifact is None or eeg_artifact.kind != "raw_eeg":
+        raise ValueError("V0.6.1 alignment requires the exact raw EEG artifact as a parent")
     if tolerance_seconds < 0 or not np.isfinite(tolerance_seconds):
         raise ValueError("alignment tolerance must be finite and non-negative")
     metadata = thaw(behavioral_artifact.metadata)
-    if metadata.get("session_id") != recording.session_id:
-        raise ValueError("EEG and behavioral evidence must share session context")
+    if not recording.participant_id:
+        raise ValueError("EEG recording must declare participant_id for alignment")
+    expected = {"participant_id": recording.participant_id, "session_id": recording.session_id, "task": recording.task}
+    mismatches = {key: (expected[key], metadata.get(key)) for key in expected if expected[key] != metadata.get(key)}
+    if mismatches:
+        raise ValueError(f"EEG and behavioral context mismatch: {mismatches}")
+    if eeg_artifact.metadata.get("participant_id") != recording.participant_id or eeg_artifact.metadata.get("session_id") != recording.session_id:
+        raise ValueError("raw EEG artifact context does not match recording")
     events = tuple(thaw(behavioral_artifact.payload)["events"])
     if not events:
         raise ValueError("behavioral artifact contains no events")
-    matched = tuple(event["event_id"] for event in events if event["onset_seconds"] >= 0)
+    if recording.duration_seconds is None or recording.sampling_rate_hz is None:
+        raise ValueError("recording duration and sampling rate are required for temporal alignment")
+    matched: list[str] = []
+    event_sample_map: list[tuple[str, int]] = []
+    for event in events:
+        onset = float(event["onset_seconds"])
+        if onset < 0:
+            raise ValueError(f"negative behavioral onset is invalid: {event['event_id']}")
+        if onset > recording.duration_seconds + tolerance_seconds:
+            raise ValueError(f"behavioral event lies outside recording duration: {event['event_id']}")
+        sample = int(round(onset * recording.sampling_rate_hz))
+        if sample > int(round(recording.duration_seconds * recording.sampling_rate_hz)):
+            raise ValueError(f"behavioral event sample lies outside recording: {event['event_id']}")
+        matched.append(event["event_id"])
+        event_sample_map.append((event["event_id"], sample))
     alignment = CrossModalAlignment(artifact_id, metadata["participant_id"], recording.session_id,
                                     metadata["task"], recording.recording_id, behavioral_artifact.artifact_id,
-                                    matched, tolerance_seconds)
+                                    eeg_artifact.artifact_id, tuple(matched), tuple(event_sample_map), tolerance_seconds)
     artifact = Artifact.derive(artifact_id, "cross_modal_alignment", alignment.to_dict(),
                                {"participant_id": alignment.participant_id, "session_id": alignment.session_id,
                                 "task": alignment.task, "modalities": ["EEG", "behavioral"],
                                 "behavioral_artifact_id": behavioral_artifact.artifact_id,
-                                "recording_id": recording.recording_id, "matched_event_count": len(matched)},
-                               "align_eeg_behavioral", parents=(behavioral_artifact,),
-                               parameters={"tolerance_seconds": tolerance_seconds, "timebase": alignment.timebase})
+                                "eeg_artifact_id": eeg_artifact.artifact_id,
+                                "eeg_content_hash": eeg_artifact.provenance.content_hash,
+                                "recording_id": recording.recording_id, "matched_event_count": len(matched),
+                                "alignment_semantics": "validated_context_and_recording_timebase_mapping"},
+                               "align_eeg_behavioral", parents=(eeg_artifact, behavioral_artifact),
+                               parameters={"tolerance_seconds": tolerance_seconds, "timebase": alignment.timebase,
+                                           "recording_duration_seconds": recording.duration_seconds,
+                                           "sampling_rate_hz": recording.sampling_rate_hz})
     return artifact, alignment
 
 

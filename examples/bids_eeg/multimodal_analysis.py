@@ -39,7 +39,7 @@ def main(path: str) -> None:
     epochs = catalog.add(epoch_eeg(filtered, "mm-epoch-001"))
     feature = catalog.add(spectral_power(epochs, "mm-alpha-power-001"))
     behavioral = catalog.add(ingest_behavioral_events("behavioral-events-001", events, "ds003810", path))
-    alignment, alignment_context = align_behavioral_events("alignment-001", recording, behavioral)
+    alignment, alignment_context = align_behavioral_events("alignment-001", recording, behavioral, raw)
     catalog.add(alignment)
     multimodal = catalog.add(multimodal_analysis(
         "multimodal-analysis-001", feature, behavioral, alignment,

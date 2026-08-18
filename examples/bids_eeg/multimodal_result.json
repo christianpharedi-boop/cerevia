@@ -11,10 +11,10 @@
   "multimodal_analysis_id": "multimodal-analysis-001",
   "finding_id": "multimodal-finding-001",
   "manifest_verified": true,
-  "manifest_hash": "a23fa86513acc1aa4df6626e8f08ded21666157809db0df76de57d9b44e1d6a1",
-  "evidence_graph_hash": "eb2eefd0d3567e3d17fc3b0027fb8342a00eb77cbbb7e381e4926c0b52ddc2fd",
+  "manifest_hash": "599e3460bbcd62cb1fcd2a34e22115bf1c9cd0aa6f521ba41dd6f296a45dbd8f",
+  "evidence_graph_hash": "5ee8095f5fe74d62108ba431d9bcf394cbb330bccedc34385c60bb4008292f99",
   "graph_node_count": 57,
-  "graph_edge_count": 87,
+  "graph_edge_count": 88,
   "findings_depending_on_behavioral": [
     "multimodal-finding-001"
   ]

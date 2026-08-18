@@ -119,7 +119,7 @@ def finding(analysis: Artifact, evidence: tuple[Artifact, ...], artifact_id: str
 
 def evidence_manifest(study_id: str, final: Artifact, catalog: ArtifactCatalog, ontology: Any | None = None) -> dict[str, Any]:
     chain = catalog.lineage(final.artifact_id)
-    manifest = {"manifest_type": "CEREVIA EVIDENCE MANIFEST", "manifest_version": "0.6.0", "study_id": study_id,
+    manifest = {"manifest_type": "CEREVIA EVIDENCE MANIFEST", "manifest_version": "0.6.1", "study_id": study_id,
                 "final_finding_id": final.artifact_id, "artifact_count": len(chain),
                 "artifacts": [a.to_dict(include_payload=False) for a in chain],
                 "provenance_chain": [a.artifact_id for a in chain], "content_hash": final.provenance.content_hash}

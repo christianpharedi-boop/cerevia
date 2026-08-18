@@ -59,12 +59,24 @@ class BIDSRun:
             task=self.task,
             condition=self.task,
             source_format=self.data_path.suffix.lstrip("."),
+            participant_id=self.participant_id,
+            duration_seconds=self.duration_seconds,
         )
 
     @property
     def recording_id(self) -> str:
         run = f"-run-{self.run}" if self.run else ""
         return f"rec-{self.participant_id.removeprefix('sub-')}-{self.task}{run}"
+
+    @property
+    def duration_seconds(self) -> float:
+        if self.data_path.suffix.lower() not in {".edf", ".bdf"}:
+            raise ValueError("recording duration requires EDF/BDF signal support")
+        reader = pyedflib.EdfReader(str(self.data_path))
+        try:
+            return float(reader.file_duration)
+        finally:
+            reader.close()
 
     def to_observation(self) -> EEGObservation:
         if self.data_path.suffix.lower() not in {".edf", ".bdf"}:

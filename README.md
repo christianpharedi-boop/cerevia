@@ -2,11 +2,13 @@
 
 **Evidence infrastructure for neuroscience.** CEREVIA records a computational path from immutable observations to provisional findings. It is not a replacement for EEG, MRI, behavioral, or physiological analysis libraries; it is the provenance and evidence layer those tools can build upon.
 
-## V0.6 Multimodal Evidence
+## V0.6.1 Alignment Integrity
 
-CEREVIA now supports a deliberately narrow multimodal proof: **EEG plus behavioral events**. The system validates that both evidence sources share a pseudonymous participant, session, task, and declared timebase before combining them. EDF annotations from the real OpenNeuro ds003810 run are ingested as behavioral-event evidence, aligned to the EEG recording context, and linked by provenance to a multimodal analysis and provisional finding.
+CEREVIA now hardens the EEG-plus-behavioral boundary. Alignment requires exact agreement on pseudonymous participant, session, and task context, and the raw EEG artifact is an exact alignment parent. Negative or out-of-range event onsets, invalid tolerances, missing recording duration, missing participant context, and changed parent identities are rejected or produce different alignment identities.
 
-The multimodal chain is:
+The alignment semantics are explicit: this release performs validated recording-timebase mapping, not independent event-detector matching. Each behavioral EDF annotation is deterministically mapped to `round(onset_seconds × sampling_rate_hz)` after bounds validation.
+
+The multimodal chain remains:
 
 ```text
 EEG raw → QC → filter → epochs → alpha power ─┐
@@ -14,7 +16,7 @@ EEG raw → QC → filter → epochs → alpha power ─┐
 EDF annotations → behavioral events → alignment ─┘
 ```
 
-The evidence graph can answer which findings depend on the behavioral artifact, while the artifact catalog remains authoritative for content hashes, parent identities, and integrity validation. See [`docs/multimodal.md`](docs/multimodal.md).
+The evidence graph identifies the final finding as dependent on behavioral evidence. See [`docs/multimodal.md`](docs/multimodal.md).
 
 ## Run
 
@@ -25,9 +27,9 @@ PYTHONPATH=. python3 examples/bids_eeg/multimodal_analysis.py \
   /path/to/ds003810/sub-02/eeg/sub-02_task-MIvsRest_run-0_eeg.edf
 ```
 
-The real-data V0.6 proof extracted 68 EDF behavioral events, aligned all 68 under the declared recording timebase, verified the evidence manifest, and projected the multimodal result into the evidence graph. No participant data is copied into this repository.
+The real OpenNeuro proof validates and maps 68 EDF annotations, verifies the manifest, and exports the multimodal evidence graph. No participant data is copied into this repository.
 
-This release intentionally does not add eye tracking, MRI, MEG, a GUI, a database, or an AI layer.
+This release deliberately remains limited to EEG plus behavioral events; it does not add eye tracking, MRI, MEG, a GUI, a database, or an AI layer.
 
 ## Inherited Earth foundation
 

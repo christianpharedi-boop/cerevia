@@ -1,28 +1,23 @@
-# CEREVIA V0.6 Multimodal Evidence
+# CEREVIA V0.6.1 Multimodal Alignment Integrity
 
-CEREVIA V0.6 adds a deliberately small multimodal layer for **EEG plus behavioral events**. The goal is not merely to store two datasets; it is to prove that both evidence sources share a participant, session, task, timebase, and provenance context before they contribute to one analysis.
+CEREVIA V0.6.1 hardens the EEG-plus-behavioral boundary. The system now requires the EEG Recording and behavioral artifact to agree on **participant, session, and task** before alignment can be created. The exact raw EEG artifact is also a required alignment parent, so changing the EEG source changes the alignment identity.
 
-## Contract
+## Temporal semantics
+
+This release describes alignment precisely as **validated recording-timebase mapping**, not as a claim that behavioral markers have been independently matched to a separate EEG event detector. Each event is checked for a finite, non-negative onset, checked against the measured recording duration, and mapped deterministically to `round(onset_seconds × sampling_rate_hz)`.
+
+The alignment artifact records the event IDs, event-to-sample map, recording duration, sampling rate, timebase, tolerance, behavioral artifact ID, EEG artifact ID, and EEG content hash. Invalid negative onsets, events outside the recording, invalid tolerances, missing duration, missing participant context, and participant/session/task mismatches are rejected.
+
+## V0.6.1 contract
 
 | Requirement | Enforcement |
 |---|---|
-| Shared participant | Behavioral artifact and EEG recording carry the same pseudonymous participant context. |
-| Shared session | Alignment rejects mismatched session identifiers. |
-| Shared task | Behavioral events are required to share one task context. |
-| Timebase | EDF annotations are represented in recording seconds; alignment records the timebase and tolerance. |
-| Provenance | Behavioral source identity, alignment parameters, event IDs, and all parent artifact hashes are preserved. |
-| Scientific status | Multimodal analyses and findings remain `PROVISIONAL`; computation does not auto-convert to truth. |
+| Shared participant | Recording and behavioral metadata must have the same pseudonymous participant ID. |
+| Shared session | Recording and behavioral metadata must have the same session ID. |
+| Shared task | Recording task and behavioral task must match exactly. |
+| Exact EEG source | The raw EEG artifact is a required alignment parent. |
+| Temporal bounds | Onsets must be non-negative and lie within the measured recording duration plus tolerance. |
+| Deterministic mapping | Each event maps to an explicit sample index using the recording sampling rate. |
+| Provenance | Behavioral and EEG parent hashes are included in the alignment artifact identity. |
 
-The implementation extracts EDF annotation markers from the real OpenNeuro ds003810 EEG run. For the validated `sub-02_task-MIvsRest_run-0_eeg.edf`, the annotation stream yielded 68 behavioral events, including motor-imagery and rest markers. The EEG raw artifact, behavioral event artifact, alignment artifact, spectral feature, multimodal analysis, and finding form one graph-connected evidence structure.
-
-## Provenance chain
-
-```text
-EEG raw ── QC ── filter ── epochs ── alpha power ──┐
-                                                     ├── multimodal analysis ── finding
-EDF annotations ── behavioral events ── alignment ──┘
-```
-
-The evidence graph exposes the behavioral artifact as a dependency of the final finding. Invalidating it therefore identifies the downstream multimodal analysis and finding as affected.
-
-This release intentionally does not add eye tracking, MRI, MEG, a GUI, a database, or an AI layer. The cross-modal context model is kept narrow until its alignment and provenance invariants are well established.
+The real OpenNeuro ds003810 proof extracts 68 EDF annotations, validates and maps all 68 events, verifies the multimodal manifest, and exposes the final finding as dependent on the behavioral evidence in the evidence graph.
