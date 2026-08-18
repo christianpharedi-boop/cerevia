@@ -22,6 +22,18 @@ V1.0 freezes the Evidence Core primitives—immutable artifacts, content identit
 
 CEREVIA Sentinel is the defensive layer above the core. It runs adversarial attack suites, supports Ed25519 verification attestations, maintains an append-only hash-linked transparency log, and propagates source revocation through dependent analyses, claims, and findings. It makes silent change difficult and detected compromise visible; it does not claim scientific truth. See [`docs/sentinel.md`](docs/sentinel.md).
 
+## V1.2 Observatory
+
+CEREVIA Observatory is a contracts-first, **read-only query layer** over manifests, evidence graphs, independent verification, Sentinel attestations, revocations, and transparency-log history. It answers “why does this finding exist?”, “what evidence supports it?”, “what did CEREVIA know at a given time?”, and “what is affected if this artifact is revoked?” without becoming a second authority capable of rewriting evidence. See [`docs/observatory.md`](docs/observatory.md).
+
+The reference implementation is intentionally a CLI rather than a dashboard:
+
+```bash
+PYTHONPATH=. python3 examples/bids_eeg/observatory_query.py \
+  examples/bids_eeg/verification_bundle.json \
+  --sentinel examples/bids_eeg/sentinel_result.json
+```
+
 ## Run
 
 ```bash
@@ -31,6 +43,9 @@ PYTHONPATH=. python3 examples/bids_eeg/evidence_aware_analysis.py \
   /path/to/ds003810/sub-02/eeg/sub-02_task-MIvsRest_run-0_eeg.edf
 PYTHONPATH=. python3 examples/bids_eeg/verify_bundle.py \
   examples/bids_eeg/verification_bundle.json
+PYTHONPATH=. python3 examples/bids_eeg/observatory_query.py \
+  examples/bids_eeg/verification_bundle.json \
+  --sentinel examples/bids_eeg/sentinel_result.json
 ```
 
 The real V1.0 proof uses OpenNeuro ds003810 EEG and its 68 EDF behavioral events. It exports the qualified claim chain and verifies it in a fresh Python process. Tests then corrupt an upstream payload, claim statement, and manifest to confirm that independent verification fails explicitly.
