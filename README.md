@@ -72,6 +72,16 @@ V1.6 freezes the smallest universal contract for a CEREVIA-compatible evidence p
 PYTHONPATH=. python3 examples/conformance/conformance_proof.py
 ```
 
+## V2.0 External Conformance
+
+V2.0 tests whether an independent implementation can produce and verify CEREVIA-compatible bundles without importing the CEREVIA package. The standalone reference implementation proves bidirectional verification, cross-domain bundle exchange, and selective revocation agreement with Observatory. See [`docs/external-conformance-v2.md`](docs/external-conformance-v2.md).
+
+```bash
+python3 examples/external_impl/standalone_protocol.py produce examples/external_impl/external_bundle.json
+python3 examples/external_impl/standalone_protocol.py verify examples/external_impl/external_bundle.json
+PYTHONPATH=. python3 examples/bids_eeg/verify_bundle.py examples/external_impl/external_bundle.json
+```
+
 ## Run
 
 ```bash

@@ -25,3 +25,6 @@ examples/cross_domain/cross_domain_bundle.json
 
 # Locally generated V1.6 conformance output
 examples/conformance/conformance_cross_domain_bundle.json
+
+# Locally generated V2.0 external implementation bundle
+examples/external_impl/external_bundle.json
