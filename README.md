@@ -56,6 +56,14 @@ PYTHONPATH=. python3 examples/earthspace/earthspace_proof.py \
   examples/earthspace/data/usgs_earthquakes_2024-01-01_m5.json
 ```
 
+## V1.5 Cross-Domain Evidence
+
+V1.5 composes independently verified neuroscience, proteomics, and Earth/Space findings into one evidence chain while preserving each domain’s source identity, content hash, and lineage. The composition relationship is explicitly provenance-only; it does not invent a biological or geophysical conclusion. Fresh-file verification and selective revocation tests ensure that invalidating one domain does not collapse unrelated evidence. See [`docs/cross-domain-v1.5.md`](docs/cross-domain-v1.5.md).
+
+```bash
+PYTHONPATH=. python3 examples/cross_domain/cross_domain_proof.py
+```
+
 ## Run
 
 ```bash
@@ -72,6 +80,7 @@ PYTHONPATH=. python3 examples/proteomics/proteomics_proof.py \
   examples/proteomics/data/hela_proteins_subset.csv
 PYTHONPATH=. python3 examples/earthspace/earthspace_proof.py \
   examples/earthspace/data/usgs_earthquakes_2024-01-01_m5.json
+PYTHONPATH=. python3 examples/cross_domain/cross_domain_proof.py
 ```
 
 The real V1.0 proof uses OpenNeuro ds003810 EEG and its 68 EDF behavioral events. It exports the qualified claim chain and verifies it in a fresh Python process. Tests then corrupt an upstream payload, claim statement, and manifest to confirm that independent verification fails explicitly.

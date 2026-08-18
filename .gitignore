@@ -19,3 +19,6 @@ examples/proteomics/proteomics_sentinel.json
 # Locally generated V1.4 Earth/Space proof outputs
 examples/earthspace/earthspace_bundle.json
 examples/earthspace/earthspace_sentinel.json
+
+# Locally generated V1.5 cross-domain proof output
+examples/cross_domain/cross_domain_bundle.json
