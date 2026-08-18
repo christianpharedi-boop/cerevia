@@ -6,7 +6,7 @@ import numpy as np
 from cerevia.acquisition.eeg import EEGObservation, ingest_eeg
 from cerevia.core.artifacts import ArtifactCatalog
 from cerevia.core.provenance import Artifact
-from cerevia.core.hashing import canonical_json, hash_object
+from cerevia.core.hashing import hash_object
 
 
 class QualityGateError(ValueError):
@@ -92,10 +92,26 @@ def statistical_analysis(feature: Artifact, artifact_id: str, null_value: float 
                            "statistical_analysis", (feature,), {"null_value": null_value})
 
 
-def finding(analysis: Artifact, evidence: tuple[Artifact, ...], artifact_id: str, statement: str) -> Artifact:
+def finding(analysis: Artifact, evidence: tuple[Artifact, ...], artifact_id: str, statement: str,
+            catalog: ArtifactCatalog | None = None) -> Artifact:
+    if analysis.kind != "analysis":
+        raise ValueError("findings must reference an analysis artifact")
     if not evidence:
         raise ValueError("findings require at least one evidence artifact")
+    if any(not isinstance(item, Artifact) for item in evidence):
+        raise ValueError("finding evidence must contain artifacts")
+    if not any(item.kind == "raw_eeg" for item in evidence):
+        raise ValueError("findings require raw observational evidence")
+    if catalog is not None:
+        analysis_lineage = catalog.lineage(analysis.artifact_id)
+        lineage_ids = {item.artifact_id for item in analysis_lineage}
+        if not {item.artifact_id for item in evidence}.issubset(lineage_ids):
+            raise ValueError("finding evidence must belong to the referenced analysis lineage")
+        for item in evidence:
+            if catalog.get(item.artifact_id).provenance.content_hash != item.provenance.content_hash:
+                raise ValueError("finding evidence content does not match the catalog artifact")
     result = {"finding_id": artifact_id, "statement": statement, "evidence": [a.artifact_id for a in evidence],
+              "evidence_content_hashes": [a.provenance.content_hash for a in evidence],
               "analysis_id": analysis.artifact_id, "statistical_result": analysis.payload, "status": "PROVISIONAL"}
     return Artifact.derive(artifact_id, "finding", result, {"status": "PROVISIONAL", "evidence_count": len(evidence)},
                            "record_finding", (analysis,) + evidence, {"claim_policy": "computation_does_not_auto_convert_to_truth"})
@@ -103,19 +119,35 @@ def finding(analysis: Artifact, evidence: tuple[Artifact, ...], artifact_id: str
 
 def evidence_manifest(study_id: str, final: Artifact, catalog: ArtifactCatalog) -> dict[str, Any]:
     chain = catalog.lineage(final.artifact_id)
-    manifest = {"manifest_type": "CEREVIA EVIDENCE MANIFEST", "manifest_version": "0.1.1", "study_id": study_id,
-                "final_finding_id": final.artifact_id, "artifacts": [a.to_dict(include_payload=False) for a in chain],
+    manifest = {"manifest_type": "CEREVIA EVIDENCE MANIFEST", "manifest_version": "0.1.2", "study_id": study_id,
+                "final_finding_id": final.artifact_id, "artifact_count": len(chain),
+                "artifacts": [a.to_dict(include_payload=False) for a in chain],
                 "provenance_chain": [a.artifact_id for a in chain], "content_hash": final.provenance.content_hash}
     manifest["manifest_hash"] = hash_object(manifest)
     return manifest
 
 
-def verify_manifest(manifest: dict[str, Any]) -> bool:
+def verify_manifest(manifest: dict[str, Any], catalog: ArtifactCatalog | None = None) -> bool:
     supplied = manifest.get("manifest_hash")
-    if not supplied:
+    if not supplied or manifest.get("artifact_count") != len(manifest.get("artifacts", [])):
         return False
     unsigned = {key: value for key, value in manifest.items() if key != "manifest_hash"}
-    return supplied == hash_object(unsigned)
+    if supplied != hash_object(unsigned):
+        return False
+    if catalog is None:
+        return True
+    if catalog.validate_integrity():
+        return False
+    try:
+        final = catalog.get(manifest["final_finding_id"])
+        chain = catalog.lineage(final.artifact_id)
+    except (KeyError, ValueError):
+        return False
+    if [item.artifact_id for item in chain] != manifest.get("provenance_chain"):
+        return False
+    if final.provenance.content_hash != manifest.get("content_hash"):
+        return False
+    return [item.to_dict(include_payload=False) for item in chain] == manifest.get("artifacts")
 
 
 def run_pipeline(observation: EEGObservation) -> tuple[ArtifactCatalog, Artifact, dict[str, Any]]:
@@ -130,5 +162,7 @@ def run_pipeline(observation: EEGObservation) -> tuple[ArtifactCatalog, Artifact
     feature = catalog.add(spectral_power(epochs, "alpha-power-001"))
     analysis = catalog.add(statistical_analysis(feature, "analysis-001"))
     final = catalog.add(finding(analysis, (raw, qc, filtered, epochs, feature), "finding-001",
-                                "The synthetic EEG contains measurable 8–12 Hz band power under the stated preprocessing and analysis contract."))
+                                "The synthetic EEG contains measurable 8–12 Hz band power under the stated preprocessing and analysis contract.", catalog=catalog))
+    if catalog.validate_integrity():
+        raise RuntimeError("integrity validation failed before manifest creation")
     return catalog, final, evidence_manifest("demo-001", final, catalog)

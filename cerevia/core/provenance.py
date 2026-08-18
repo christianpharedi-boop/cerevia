@@ -1,6 +1,6 @@
 """Machine-readable provenance records and lineage traversal."""
 from __future__ import annotations
-from dataclasses import asdict, dataclass
+from dataclasses import dataclass
 from datetime import datetime, timezone
 from typing import Any
 from .hashing import freeze, hash_object, thaw
@@ -20,7 +20,7 @@ class Provenance:
 
     @classmethod
     def create(cls, artifact_id: str, parent_artifacts: tuple[str, ...], operation: str,
-               parameters: dict[str, Any], content_hash: str, software_version: str = "0.1.1",
+               parameters: dict[str, Any], content_hash: str, software_version: str = "0.1.2",
                creator: str = "cerevia", environment: dict[str, str] | None = None) -> "Provenance":
         if environment is None:
             from .environment import fingerprint
@@ -53,13 +53,27 @@ class Artifact:
     @classmethod
     def derive(cls, artifact_id: str, kind: str, payload: Any, metadata: dict[str, Any],
                operation: str, parents: tuple["Artifact", ...] = (), parameters: dict[str, Any] | None = None,
-               environment: dict[str, str] | None = None) -> "Artifact":
+               environment: dict[str, str] | None = None, software_version: str = "0.1.2") -> "Artifact":
+        from .environment import fingerprint
         immutable_payload = freeze(payload)
         immutable_metadata = freeze(metadata)
+        immutable_parameters = freeze(parameters or {})
+        computational_environment = environment or fingerprint()
         parent_ids = tuple(parent.artifact_id for parent in parents)
-        content_hash = hash_object({"kind": kind, "payload": immutable_payload, "metadata": immutable_metadata})
-        provenance = Provenance.create(artifact_id, parent_ids, operation, parameters or {}, content_hash,
-                                       environment=environment)
+        parent_refs = [{"artifact_id": parent.artifact_id, "content_hash": parent.provenance.content_hash} for parent in parents]
+        content_hash = hash_object({
+            "artifact_id": artifact_id,
+            "kind": kind,
+            "payload": immutable_payload,
+            "metadata": immutable_metadata,
+            "operation": operation,
+            "parameters": immutable_parameters,
+            "software_version": software_version,
+            "environment": computational_environment,
+            "parents": parent_refs,
+        })
+        provenance = Provenance.create(artifact_id, parent_ids, operation, thaw(immutable_parameters), content_hash,
+                                       software_version=software_version, environment=computational_environment)
         return cls(artifact_id, kind, immutable_payload, immutable_metadata, provenance)
 
     def to_dict(self, include_payload: bool = True) -> dict[str, Any]:

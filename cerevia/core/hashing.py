@@ -34,7 +34,7 @@ def freeze(value: Any) -> Any:
 
 def thaw(value: Any) -> Any:
     """Return a JSON-compatible mutable view without changing the stored object."""
-    if isinstance(value, MappingProxyType):
+    if isinstance(value, (dict, MappingProxyType)):
         return {key: thaw(item) for key, item in value.items()}
     if isinstance(value, (tuple, list)):
         return [thaw(item) for item in value]

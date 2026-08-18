@@ -1,7 +1,9 @@
-"""Minimal EEG observation model for CEREVIA V0.1."""
+"""Minimal EEG observation model for CEREVIA V0.1.2."""
 from __future__ import annotations
 from dataclasses import dataclass
 from typing import Any
+import math
+import re
 import numpy as np
 from cerevia.core.provenance import Artifact
 
@@ -29,15 +31,32 @@ class EEGObservation:
             raise ValueError("EEG data must be channels x samples")
         if array.shape[0] != len(channel_names):
             raise ValueError("channel_names must match channel count")
-        return cls(tuple(tuple(float(x) for x in row) for row in array), float(sampling_rate_hz), channel_names, events)
+        return cls(tuple(tuple(float(x) for x in row) for row in array), float(sampling_rate_hz), tuple(channel_names), tuple(events))
 
     def array(self) -> np.ndarray:
         return np.asarray(self.data, dtype=float)
 
 
+def validate_observation_metadata(observation: EEGObservation, study_id: str, participant_id: str, session_id: str) -> None:
+    errors: list[str] = []
+    if not study_id or not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9._-]*", study_id):
+        errors.append("study_id must be a non-empty identifier")
+    if not re.fullmatch(r"sub-[A-Za-z0-9][A-Za-z0-9._-]*", participant_id):
+        errors.append("participant_id must be an immutable pseudonymous identifier such as sub-001")
+    if not re.fullmatch(r"ses-[A-Za-z0-9][A-Za-z0-9._-]*", session_id):
+        errors.append("session_id must be an identifier such as ses-01")
+    if not math.isfinite(observation.sampling_rate_hz) or observation.sampling_rate_hz <= 0:
+        errors.append("sampling_rate_hz must be finite and positive")
+    if not observation.channel_names or any(not name.strip() for name in observation.channel_names):
+        errors.append("channel_names must contain non-empty names")
+    if len(set(observation.channel_names)) != len(observation.channel_names):
+        errors.append("channel_names must be unique")
+    if errors:
+        raise ValueError("invalid EEG metadata: " + "; ".join(errors))
+
+
 def ingest_eeg(artifact_id: str, observation: EEGObservation, study_id: str, participant_id: str, session_id: str) -> Artifact:
-    if not participant_id.startswith("sub-"):
-        raise ValueError("participant_id must be an immutable pseudonymous identifier such as sub-001")
+    validate_observation_metadata(observation, study_id, participant_id, session_id)
     return Artifact.derive(
         artifact_id, "raw_eeg", observation.as_payload(),
         {"study_id": study_id, "participant_id": participant_id, "session_id": session_id,
