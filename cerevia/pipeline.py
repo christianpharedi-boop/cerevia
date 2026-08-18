@@ -94,7 +94,7 @@ def statistical_analysis(feature: Artifact, artifact_id: str, null_value: float 
 
 def finding(analysis: Artifact, evidence: tuple[Artifact, ...], artifact_id: str, statement: str,
             catalog: ArtifactCatalog | None = None) -> Artifact:
-    if analysis.kind != "analysis":
+    if analysis.kind not in {"analysis", "multimodal_analysis"}:
         raise ValueError("findings must reference an analysis artifact")
     if not evidence:
         raise ValueError("findings require at least one evidence artifact")
@@ -119,7 +119,7 @@ def finding(analysis: Artifact, evidence: tuple[Artifact, ...], artifact_id: str
 
 def evidence_manifest(study_id: str, final: Artifact, catalog: ArtifactCatalog, ontology: Any | None = None) -> dict[str, Any]:
     chain = catalog.lineage(final.artifact_id)
-    manifest = {"manifest_type": "CEREVIA EVIDENCE MANIFEST", "manifest_version": "0.5.0", "study_id": study_id,
+    manifest = {"manifest_type": "CEREVIA EVIDENCE MANIFEST", "manifest_version": "0.6.0", "study_id": study_id,
                 "final_finding_id": final.artifact_id, "artifact_count": len(chain),
                 "artifacts": [a.to_dict(include_payload=False) for a in chain],
                 "provenance_chain": [a.artifact_id for a in chain], "content_hash": final.provenance.content_hash}

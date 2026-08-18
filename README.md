@@ -2,24 +2,32 @@
 
 **Evidence infrastructure for neuroscience.** CEREVIA records a computational path from immutable observations to provisional findings. It is not a replacement for EEG, MRI, behavioral, or physiological analysis libraries; it is the provenance and evidence layer those tools can build upon.
 
-## V0.5 Evidence Graph
+## V0.6 Multimodal Evidence
 
-CEREVIA now projects its artifact lineage and neuroscience ontology into a pure computational evidence graph. The graph models Study, Participant, Session, Recording, Event, Artifact, Transformation, Feature, Analysis, and Finding nodes connected by `GENERATED_BY`, `DERIVED_FROM`, `RECORDED_DURING`, `ASSOCIATED_WITH`, `ANALYZED_BY`, and `SUPPORTS` edges.
+CEREVIA now supports a deliberately narrow multimodal proof: **EEG plus behavioral events**. The system validates that both evidence sources share a pseudonymous participant, session, task, and declared timebase before combining them. EDF annotations from the real OpenNeuro ds003810 run are ingested as behavioral-event evidence, aligned to the EEG recording context, and linked by provenance to a multimodal analysis and provisional finding.
 
-The graph answers questions such as which evidence supports a finding, which findings depend on a recording, and what downstream evidence would be affected if a preprocessing artifact were invalidated. It is an in-memory model with no GUI, database, cloud service, or AI dependency. See [`docs/evidence-graph.md`](docs/evidence-graph.md).
+The multimodal chain is:
 
-Evidence manifests now include a deterministic graph representation and `evidence_graph_hash` alongside the existing audit manifest hash. The artifact catalog remains authoritative for content identity and integrity validation.
+```text
+EEG raw → QC → filter → epochs → alpha power ─┐
+                                               ├→ multimodal analysis → finding
+EDF annotations → behavioral events → alignment ─┘
+```
+
+The evidence graph can answer which findings depend on the behavioral artifact, while the artifact catalog remains authoritative for content hashes, parent identities, and integrity validation. See [`docs/multimodal.md`](docs/multimodal.md).
 
 ## Run
 
 ```bash
 cd /home/ubuntu/cerevia
 python3 -m unittest discover -s tests -v
-PYTHONPATH=. python3 examples/bids_eeg/reproduce_analysis.py \
+PYTHONPATH=. python3 examples/bids_eeg/multimodal_analysis.py \
   /path/to/ds003810/sub-02/eeg/sub-02_task-MIvsRest_run-0_eeg.edf
 ```
 
-The V0.5 example runs the reproducible real-data analysis, projects the result into an evidence graph, and reports support and invalidation coverage. No copied participant data is required in the repository.
+The real-data V0.6 proof extracted 68 EDF behavioral events, aligned all 68 under the declared recording timebase, verified the evidence manifest, and projected the multimodal result into the evidence graph. No participant data is copied into this repository.
+
+This release intentionally does not add eye tracking, MRI, MEG, a GUI, a database, or an AI layer.
 
 ## Inherited Earth foundation
 

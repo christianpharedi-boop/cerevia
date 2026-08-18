@@ -1,0 +1,21 @@
+{
+  "dataset_id": "doi:10.18112/openneuro.ds003810.v2.0.2",
+  "source_sha256": "33ce7952b1d419c5ccdf6e088287b17f4475611ccf32d1218463ed9047492f41",
+  "recording_id": "rec-02-MIvsRest-run-0",
+  "behavioral_event_count": 68,
+  "matched_event_count": 68,
+  "modalities": [
+    "EEG",
+    "behavioral"
+  ],
+  "multimodal_analysis_id": "multimodal-analysis-001",
+  "finding_id": "multimodal-finding-001",
+  "manifest_verified": true,
+  "manifest_hash": "a23fa86513acc1aa4df6626e8f08ded21666157809db0df76de57d9b44e1d6a1",
+  "evidence_graph_hash": "eb2eefd0d3567e3d17fc3b0027fb8342a00eb77cbbb7e381e4926c0b52ddc2fd",
+  "graph_node_count": 57,
+  "graph_edge_count": 87,
+  "findings_depending_on_behavioral": [
+    "multimodal-finding-001"
+  ]
+}

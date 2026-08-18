@@ -200,6 +200,9 @@ def project_evidence_graph(catalog: ArtifactCatalog, ontology: NeuroscienceOntol
             target = metadata.get(key)
             if target in graph.nodes:
                 graph.add_edge(artifact.artifact_id, target, EdgeType.RECORDED_DURING if key == "recording_id" else EdgeType.ASSOCIATED_WITH)
+        for associated_id in metadata.get("associated_artifact_ids", []):
+            if associated_id in graph.nodes:
+                graph.add_edge(artifact.artifact_id, associated_id, EdgeType.ASSOCIATED_WITH)
         if artifact.kind == "finding":
             payload = thaw(artifact.payload)
             analysis_id = payload.get("analysis_id")
