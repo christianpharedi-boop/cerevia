@@ -2,7 +2,7 @@ from __future__ import annotations
 import unittest
 import numpy as np
 
-from cerevia.acquisition.eeg import EEGObservation, ingest_eeg
+from cerevia.neuro.eeg import EEGObservation, ingest_eeg
 from cerevia.study.ontology import (
     Analysis, Channel, Epoch, Event, Feature, Finding, Modality, NeuroscienceOntology,
     Participant, Recording, Session, Study,

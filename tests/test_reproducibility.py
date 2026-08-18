@@ -3,7 +3,7 @@ from dataclasses import replace
 import unittest
 import numpy as np
 
-from cerevia.acquisition.eeg import EEGObservation, ingest_eeg
+from cerevia.neuro.eeg import EEGObservation, ingest_eeg
 from cerevia.analysis.reproducibility import AnalysisSpecification, execute_analysis, verify_rerun
 from cerevia.core.artifacts import ArtifactCatalog
 

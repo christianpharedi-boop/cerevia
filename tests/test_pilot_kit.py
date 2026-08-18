@@ -14,7 +14,7 @@ class PilotKitTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
         cls.root = Path(__file__).parents[1]
-        cls.script = cls.root / "examples/pilot/pilot_proof.py"
+        cls.script = cls.root / "examples/institutional_pilot/pilot_proof.py"
 
     def run_proof(self) -> dict:
         with tempfile.TemporaryDirectory() as directory:

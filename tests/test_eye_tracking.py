@@ -10,7 +10,7 @@ from cerevia.core.artifacts import ArtifactCatalog
 from cerevia.core.provenance import Artifact
 from cerevia.graph.evidence import project_evidence_graph
 from cerevia.multimodal.evidence import BehavioralEvent, align_behavioral_events, ingest_behavioral_events
-from cerevia.multimodal.eye_tracking import align_eeg_eye, ingest_eye_tracking, load_eye_tracking_run, three_stream_inference
+from cerevia.neuro.eye_tracking import align_eeg_eye, ingest_eye_tracking, load_eye_tracking_run, three_stream_inference
 from cerevia.study.ontology import Channel, Modality, Recording
 from cerevia.pipeline import finding
 

@@ -12,7 +12,7 @@ def main() -> int:
     args = parser.parse_args()
     root = Path(__file__).parents[2]
     checklist = json.loads(args.checklist.read_text(encoding="utf-8"))
-    required = ["docs/evidence-interoperability-v1.md", "examples/external_impl/standalone_protocol.py", "docs/institutional-exchange-v2.1.md", "examples/pilot/pilot_proof.py", "docs/external-institutional-pilot-v2.2.md", "docs/pilot/30-minute-quickstart.md", "docs/pilot/external-result-template.json"]
+    required = ["docs/evidence-interoperability-v1.md", "examples/substrate_stress_tests/standalone_protocol.py", "docs/institutional-exchange-v2.1.md", "examples/institutional_pilot/pilot_proof.py", "docs/external-institutional-pilot-v2.2.md", "docs/pilot/30-minute-quickstart.md", "docs/pilot/external-result-template.json"]
     missing = [path for path in required if not (root / path).exists()]
     complete = [item["id"] for item in checklist["checks"] if item["status"] == "COMPLETE"]
     pending = [item["id"] for item in checklist["checks"] if item["status"] == "PENDING_EXTERNAL"]

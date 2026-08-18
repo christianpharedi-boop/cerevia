@@ -3,7 +3,12 @@ from __future__ import annotations
 
 import argparse
 import json
+import sys
 from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[2]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
 
 from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
 
@@ -15,8 +20,8 @@ from cerevia.pilot.kit import compare_answers, extract_exchange_answer, mutate_e
 
 def main() -> int:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--bundle", type=Path, default=Path("examples/cross_domain/cross_domain_bundle.json"))
-    parser.add_argument("--output", type=Path, default=Path("examples/pilot/pilot_results.json"))
+    parser.add_argument("--bundle", type=Path, default=Path("examples/substrate_stress_tests/cross_domain_bundle.json"))
+    parser.add_argument("--output", type=Path, default=Path("examples/institutional_pilot/pilot_results.json"))
     args = parser.parse_args()
     bundle = load_bundle(args.bundle)
     private = Ed25519PrivateKey.generate()

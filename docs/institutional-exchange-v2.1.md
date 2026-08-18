@@ -38,7 +38,7 @@ The reference proof simulates Institution A sending a cross-domain bundle to Ins
 
 ```bash
 cd /home/ubuntu/cerevia
-PYTHONPATH=. python3 examples/institutional_exchange/institutional_exchange_proof.py
+PYTHONPATH=. python3 examples/institutional_pilot/institutional_exchange_proof.py
 PYTHONPATH=. python3 -m unittest tests.test_institutional_exchange -v
 ```
 

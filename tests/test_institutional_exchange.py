@@ -15,7 +15,7 @@ class InstitutionalExchangeTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
         cls.root = Path(__file__).parents[1]
-        cls.bundle = load_bundle(cls.root / "examples/cross_domain/cross_domain_bundle.json")
+        cls.bundle = load_bundle(cls.root / "examples/substrate_stress_tests/cross_domain_bundle.json")
 
     def make_exchange(self):
         private = Ed25519PrivateKey.generate()

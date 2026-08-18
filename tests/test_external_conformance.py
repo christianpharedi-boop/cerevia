@@ -15,9 +15,9 @@ class ExternalConformanceTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
         cls.root = Path(__file__).parents[1]
-        cls.external = cls.root / "examples/external_impl/standalone_protocol.py"
-        cls.cross_bundle = cls.root / "examples/cross_domain/cross_domain_bundle.json"
-        cls.eeg_bundle = cls.root / "examples/bids_eeg/verification_bundle.json"
+        cls.external = cls.root / "examples/substrate_stress_tests/standalone_protocol.py"
+        cls.cross_bundle = cls.root / "examples/substrate_stress_tests/cross_domain_bundle.json"
+        cls.eeg_bundle = cls.root / "examples/neuro/verification_bundle.json"
 
     def run_external(self, *args: str) -> dict:
         result = subprocess.run([sys.executable, str(self.external), *args], cwd=self.root, check=True, capture_output=True, text=True)

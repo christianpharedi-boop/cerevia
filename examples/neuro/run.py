@@ -3,7 +3,7 @@ import json
 from pathlib import Path
 import numpy as np
 
-from cerevia.acquisition.eeg import EEGObservation
+from cerevia.neuro.eeg import EEGObservation
 from cerevia.pipeline import run_pipeline
 
 

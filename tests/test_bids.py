@@ -5,7 +5,7 @@ from pathlib import Path
 import tempfile
 import unittest
 
-from cerevia.acquisition.bids import load_bids_eeg_run
+from cerevia.neuro.bids import load_bids_eeg_run
 
 
 class BidsTests(unittest.TestCase):

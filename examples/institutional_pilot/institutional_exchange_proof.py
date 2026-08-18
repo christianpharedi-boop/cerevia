@@ -14,9 +14,9 @@ from cerevia.verification.bundle import verify_bundle_file
 
 def main() -> int:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--bundle", type=Path, default=Path("examples/cross_domain/cross_domain_bundle.json"))
-    parser.add_argument("--package", type=Path, default=Path("examples/institutional_exchange/exchange_package.json"))
-    parser.add_argument("--audit", type=Path, default=Path("examples/institutional_exchange/audit_log.json"))
+    parser.add_argument("--bundle", type=Path, default=Path("examples/substrate_stress_tests/cross_domain_bundle.json"))
+    parser.add_argument("--package", type=Path, default=Path("examples/institutional_pilot/exchange_package.json"))
+    parser.add_argument("--audit", type=Path, default=Path("examples/institutional_pilot/audit_log.json"))
     args = parser.parse_args()
 
     bundle = load_bundle(args.bundle)

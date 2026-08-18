@@ -22,8 +22,8 @@ A qualified claim remains a qualified claim. The descriptive result demonstrates
 
 ```bash
 cd /home/ubuntu/cerevia
-PYTHONPATH=. python3 examples/proteomics/proteomics_proof.py \
-  examples/proteomics/data/hela_proteins_subset.csv
+PYTHONPATH=. python3 examples/transplants/proteomics_proof.py \
+  examples/transplants/data/hela_proteins_subset.csv
 ```
 
 The generated bundle and Sentinel output are local proof artifacts and are ignored by Git. The compact source fixture remains committed so the proof can be repeated independently.

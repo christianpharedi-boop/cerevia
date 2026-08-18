@@ -4,7 +4,7 @@ import json
 import unittest
 from pathlib import Path
 
-from cerevia.domain.earthspace import build_earthspace_chain
+from cerevia.adapters.earthspace import build_earthspace_chain
 from cerevia.observatory import ObservatorySnapshot
 from cerevia.sentinel.security import run_attack_suite
 from cerevia.verification.bundle import build_bundle, verify_bundle
@@ -14,7 +14,7 @@ class EarthSpaceTransplantTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
         root = Path(__file__).parents[1]
-        cls.observations = root / "examples/earthspace/data/usgs_earthquakes_2024-01-01_m5.json"
+        cls.observations = root / "examples/transplants/data/usgs_earthquakes_2024-01-01_m5.json"
         cls.catalog, cls.finding, cls.execution, cls.artifacts = build_earthspace_chain(cls.observations)
         cls.bundle = build_bundle(cls.execution["manifest"], cls.execution["specification"], cls.execution["specification_hash"], cls.catalog, cls.execution["execution_identity"])
 

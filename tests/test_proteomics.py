@@ -4,7 +4,7 @@ import json
 import unittest
 from pathlib import Path
 
-from cerevia.domain.proteomics import build_proteomics_chain
+from cerevia.adapters.proteomics import build_proteomics_chain
 from cerevia.observatory import ObservatorySnapshot
 from cerevia.sentinel.security import run_attack_suite
 from cerevia.verification.bundle import build_bundle, verify_bundle
@@ -14,7 +14,7 @@ class ProteomicsTransplantTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
         root = Path(__file__).parents[1]
-        cls.assay = root / "examples/proteomics/data/hela_proteins_subset.csv"
+        cls.assay = root / "examples/transplants/data/hela_proteins_subset.csv"
         cls.catalog, cls.finding, cls.execution, cls.artifacts = build_proteomics_chain(cls.assay)
         cls.bundle = build_bundle(cls.execution["manifest"], cls.execution["specification"], cls.execution["specification_hash"], cls.catalog, cls.execution["execution_identity"])
 

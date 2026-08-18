@@ -15,9 +15,9 @@ class CrossDomainTests(unittest.TestCase):
     def setUpClass(cls) -> None:
         root = Path(__file__).parents[1]
         cls.paths = {
-            "neuroscience": root / "examples/bids_eeg/verification_bundle.json",
-            "proteomics": root / "examples/proteomics/proteomics_bundle.json",
-            "earthspace": root / "examples/earthspace/earthspace_bundle.json",
+            "neuroscience": root / "examples/neuro/verification_bundle.json",
+            "proteomics": root / "examples/transplants/proteomics_bundle.json",
+            "earthspace": root / "examples/transplants/earthspace_bundle.json",
         }
         cls.bundles = {domain: load_bundle(path) for domain, path in cls.paths.items()}
         cls.bundle, cls.catalog, cls.ids = compose_cross_domain_bundle(cls.bundles)

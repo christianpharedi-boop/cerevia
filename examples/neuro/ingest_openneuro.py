@@ -4,7 +4,7 @@ import json
 from pathlib import Path
 import sys
 
-from cerevia.multimodal.eye_tracking import load_eye_tracking_run, ingest_eye_tracking, align_eeg_eye
+from cerevia.neuro.eye_tracking import load_eye_tracking_run, ingest_eye_tracking, align_eeg_eye
 from cerevia.core.artifacts import ArtifactCatalog
 from cerevia.study.ontology import Channel, Modality, Recording
 from cerevia.core.provenance import Artifact

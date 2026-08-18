@@ -60,7 +60,7 @@ Run the proof with:
 
 ```bash
 cd /home/ubuntu/cerevia
-PYTHONPATH=. python3 examples/conformance/conformance_proof.py
+PYTHONPATH=. python3 examples/substrate_stress_tests/conformance_proof.py
 ```
 
 ## References

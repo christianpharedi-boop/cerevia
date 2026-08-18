@@ -13,7 +13,7 @@ class ProtocolAPITests(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
         root = Path(__file__).parents[1]
-        cls.bundle_path = root / "examples/cross_domain/cross_domain_bundle.json"
+        cls.bundle_path = root / "examples/substrate_stress_tests/cross_domain_bundle.json"
         cls.bundle = load_bundle(cls.bundle_path)
         cls.client = TestClient(create_app(ReadOnlyStore(cls.bundle_path)))
 

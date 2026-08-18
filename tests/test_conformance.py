@@ -14,7 +14,7 @@ class InteroperabilityConformanceTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
         root = Path(__file__).parents[1]
-        cls.bundles = {"neuroscience": load_bundle(root / "examples/bids_eeg/verification_bundle.json"), "proteomics": load_bundle(root / "examples/proteomics/proteomics_bundle.json"), "earthspace": load_bundle(root / "examples/earthspace/earthspace_bundle.json")}
+        cls.bundles = {"neuroscience": load_bundle(root / "examples/neuro/verification_bundle.json"), "proteomics": load_bundle(root / "examples/transplants/proteomics_bundle.json"), "earthspace": load_bundle(root / "examples/transplants/earthspace_bundle.json")}
         cls.results = validate_profiles(REFERENCE_PROFILES, cls.bundles)
         cls.cross_bundle, _, _ = compose_cross_domain_bundle(cls.bundles)
         cls.cross_result = validate_cross_domain_composition(cls.cross_bundle, REFERENCE_PROFILES)

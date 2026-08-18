@@ -22,8 +22,8 @@ The claim is intentionally descriptive and qualified. It records what the declar
 
 ```bash
 cd /home/ubuntu/cerevia
-PYTHONPATH=. python3 examples/earthspace/earthspace_proof.py \
-  examples/earthspace/data/usgs_earthquakes_2024-01-01_m5.json
+PYTHONPATH=. python3 examples/transplants/earthspace_proof.py \
+  examples/transplants/data/usgs_earthquakes_2024-01-01_m5.json
 ```
 
 The generated bundle and Sentinel output are ignored local proof artifacts. The fetched GeoJSON fixture remains committed with its query URL and SHA-256 identity available through the normal Git history.

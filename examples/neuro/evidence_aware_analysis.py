@@ -4,7 +4,7 @@ import json
 from pathlib import Path
 import sys
 
-from cerevia.acquisition.bids import load_bids_eeg_run, ingest_bids_eeg
+from cerevia.neuro.bids import load_bids_eeg_run, ingest_bids_eeg
 from cerevia.analysis.evidence_aware import EvidenceAwareAnalysisSpecification, execute_evidence_aware_analysis
 from cerevia.verification.bundle import build_bundle, write_bundle, verify_bundle
 from cerevia.core.artifacts import ArtifactCatalog

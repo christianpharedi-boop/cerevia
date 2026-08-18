@@ -25,7 +25,7 @@ Two runs are reproducible when their execution identities match. This tests comp
 The reproducibility example executes the declared analysis twice on the real OpenNeuro ds003810 `sub-02_task-MIvsRest_run-0_eeg.edf` recording. Both executions read the same BIDS source identity, use the same ontology context, create the same output artifact IDs, and produce the same final content hash and execution identity.
 
 ```bash
-PYTHONPATH=. python3 examples/bids_eeg/reproduce_analysis.py \
+PYTHONPATH=. python3 examples/neuro/reproduce_analysis.py \
   /path/to/ds003810/sub-02/eeg/sub-02_task-MIvsRest_run-0_eeg.edf
 ```
 

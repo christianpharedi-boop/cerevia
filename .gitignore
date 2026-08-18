@@ -8,30 +8,30 @@ venv/
 build/
 dist/
 
-# Locally generated real-data verification bundle
-examples/bids_eeg/verification_bundle.json
-examples/bids_eeg/sentinel_result.json
+# Locally generated real-data neuroscience verification outputs
+examples/neuro/verification_bundle.json
+examples/neuro/sentinel_result.json
 
 # Locally generated V1.3 proteomics proof outputs
-examples/proteomics/proteomics_bundle.json
-examples/proteomics/proteomics_sentinel.json
+examples/transplants/proteomics_bundle.json
+examples/transplants/proteomics_sentinel.json
 
 # Locally generated V1.4 Earth/Space proof outputs
-examples/earthspace/earthspace_bundle.json
-examples/earthspace/earthspace_sentinel.json
+examples/transplants/earthspace_bundle.json
+examples/transplants/earthspace_sentinel.json
 
 # Locally generated V1.5 cross-domain proof output
-examples/cross_domain/cross_domain_bundle.json
+examples/substrate_stress_tests/cross_domain_bundle.json
 
 # Locally generated V1.6 conformance output
-examples/conformance/conformance_cross_domain_bundle.json
+examples/substrate_stress_tests/conformance_cross_domain_bundle.json
 
 # Locally generated V2.0 external implementation bundle
-examples/external_impl/external_bundle.json
+examples/substrate_stress_tests/external_bundle.json
 
 # Locally generated V2.1 institutional exchange artifacts
-examples/institutional_exchange/exchange_package.json
-examples/institutional_exchange/audit_log.json
+examples/institutional_pilot/exchange_package.json
+examples/institutional_pilot/audit_log.json
 
 # Locally generated V2.2 pilot result
-examples/pilot/pilot_results.json
+examples/institutional_pilot/pilot_results.json

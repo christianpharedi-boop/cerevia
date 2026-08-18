@@ -11,7 +11,7 @@ class ReadinessTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
         cls.root = Path(__file__).parents[1]
-        cls.checker = cls.root / "examples/pilot/check_readiness.py"
+        cls.checker = cls.root / "examples/institutional_pilot/check_readiness.py"
         cls.checklist = cls.root / "docs/pilot/readiness.json"
 
     def test_readiness_checker_reports_handoff_ready_but_external_pending(self):

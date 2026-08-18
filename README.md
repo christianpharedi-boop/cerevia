@@ -2,6 +2,18 @@
 
 **Evidence infrastructure for neuroscience.** CEREVIA records a computational path from immutable observations to independently verifiable scientific claims. It is not a replacement for EEG, MRI, behavioral, or physiological analysis libraries; it is the provenance and evidence layer those tools can build upon.
 
+## Start Here: EEG/BIDS Provenance
+
+A scientific finding should remain inspectable from its serialized claim back through analysis outputs and immutable observations. CEREVIA's neuroscience path makes that workflow concrete for EEG/BIDS artifacts while keeping verification independent of the original execution process.
+
+Run the smallest complete proof first:
+
+```bash
+python3 examples/neuro/quickstart.py
+```
+
+Then explore the [BIDS/EEG guide](docs/bids-eeg.md), [reproducibility guide](docs/reproducibility.md), and [claim validation guide](docs/claim-validation.md). CEREVIA's trust architecture has also been tested against proteomics and Earth/Space data as substrate transplant tests; those secondary demonstrations are indexed in [`docs/README.md`](docs/README.md).
+
 ## V1.0 Independent Verification
 
 CEREVIA V1.0 answers a focused question: **Can an independent researcher verify the evidence-to-claim chain without access to the original in-memory execution state?**
@@ -29,9 +41,9 @@ CEREVIA Observatory is a contracts-first, **read-only query layer** over manifes
 The reference implementation is intentionally a CLI rather than a dashboard:
 
 ```bash
-PYTHONPATH=. python3 examples/bids_eeg/observatory_query.py \
-  examples/bids_eeg/verification_bundle.json \
-  --sentinel examples/bids_eeg/sentinel_result.json
+PYTHONPATH=. python3 examples/neuro/observatory_query.py \
+  examples/neuro/verification_bundle.json \
+  --sentinel examples/neuro/sentinel_result.json
 ```
 
 ## V1.3 Proteomics Domain Transplant
@@ -41,8 +53,8 @@ V1.3 tests whether the exact Evidence Core, Sentinel, and Observatory trust sema
 The transplant proof uses the same 13 adversarial Sentinel attacks and the same Observatory `impact_of()` query used for neuroscience:
 
 ```bash
-PYTHONPATH=. python3 examples/proteomics/proteomics_proof.py \
-  examples/proteomics/data/hela_proteins_subset.csv
+PYTHONPATH=. python3 examples/transplants/proteomics_proof.py \
+  examples/transplants/data/hela_proteins_subset.csv
 ```
 
 ## V1.4 Earth/Space Domain Transplant
@@ -52,8 +64,8 @@ V1.4 tests the same trust architecture against spatial-temporal observations and
 The proof uses the same 13 adversarial Sentinel attacks and the same Observatory `impact_of()` query as neuroscience and proteomics:
 
 ```bash
-PYTHONPATH=. python3 examples/earthspace/earthspace_proof.py \
-  examples/earthspace/data/usgs_earthquakes_2024-01-01_m5.json
+PYTHONPATH=. python3 examples/transplants/earthspace_proof.py \
+  examples/transplants/data/usgs_earthquakes_2024-01-01_m5.json
 ```
 
 ## V1.5 Cross-Domain Evidence
@@ -61,7 +73,7 @@ PYTHONPATH=. python3 examples/earthspace/earthspace_proof.py \
 V1.5 composes independently verified neuroscience, proteomics, and Earth/Space findings into one evidence chain while preserving each domain’s source identity, content hash, and lineage. The composition relationship is explicitly provenance-only; it does not invent a biological or geophysical conclusion. Fresh-file verification and selective revocation tests ensure that invalidating one domain does not collapse unrelated evidence. See [`docs/cross-domain-v1.5.md`](docs/cross-domain-v1.5.md).
 
 ```bash
-PYTHONPATH=. python3 examples/cross_domain/cross_domain_proof.py
+PYTHONPATH=. python3 examples/substrate_stress_tests/cross_domain_proof.py
 ```
 
 ## V1.6 Evidence Interoperability Specification
@@ -69,7 +81,7 @@ PYTHONPATH=. python3 examples/cross_domain/cross_domain_proof.py
 V1.6 freezes the smallest universal contract for a CEREVIA-compatible evidence producer: evidence identity, complete lineage, independent serialized verification, computable invalidation, and qualified claims. Each adapter declares an `EvidenceInteroperabilityProfile`; the reusable conformance suite validates neuroscience, proteomics, Earth/Space, and their cross-domain composition. See [`docs/evidence-interoperability-v1.md`](docs/evidence-interoperability-v1.md).
 
 ```bash
-PYTHONPATH=. python3 examples/conformance/conformance_proof.py
+PYTHONPATH=. python3 examples/substrate_stress_tests/conformance_proof.py
 ```
 
 ## V2.0 External Conformance
@@ -77,9 +89,9 @@ PYTHONPATH=. python3 examples/conformance/conformance_proof.py
 V2.0 tests whether an independent implementation can produce and verify CEREVIA-compatible bundles without importing the CEREVIA package. The standalone reference implementation proves bidirectional verification, cross-domain bundle exchange, and selective revocation agreement with Observatory. See [`docs/external-conformance-v2.md`](docs/external-conformance-v2.md).
 
 ```bash
-python3 examples/external_impl/standalone_protocol.py produce examples/external_impl/external_bundle.json
-python3 examples/external_impl/standalone_protocol.py verify examples/external_impl/external_bundle.json
-PYTHONPATH=. python3 examples/bids_eeg/verify_bundle.py examples/external_impl/external_bundle.json
+python3 examples/substrate_stress_tests/standalone_protocol.py produce examples/substrate_stress_tests/external_bundle.json
+python3 examples/substrate_stress_tests/standalone_protocol.py verify examples/substrate_stress_tests/external_bundle.json
+PYTHONPATH=. python3 examples/neuro/verify_bundle.py examples/substrate_stress_tests/external_bundle.json
 ```
 
 ## V2.1 Institutional Exchange Profile
@@ -87,7 +99,7 @@ PYTHONPATH=. python3 examples/bids_eeg/verify_bundle.py examples/external_impl/e
 V2.1 defines the operational boundary for institution-to-institution exchange: signed package envelopes, signer identity and key rotation, retention and access policy, revocation snapshots, append-only audit history, and out-of-band evidence locations. The trust envelope never copies sensitive scientific payloads merely because it can. See [`docs/institutional-exchange-v2.1.md`](docs/institutional-exchange-v2.1.md).
 
 ```bash
-PYTHONPATH=. python3 examples/institutional_exchange/institutional_exchange_proof.py
+PYTHONPATH=. python3 examples/institutional_pilot/institutional_exchange_proof.py
 ```
 
 ## V2.2 External Institutional Pilot
@@ -95,7 +107,7 @@ PYTHONPATH=. python3 examples/institutional_exchange/institutional_exchange_proo
 V2.2 prepares the first external institutional experiment rather than claiming that one has already occurred. It provides a blind-exchange fixture, valid and adversarial package variants, a machine-readable answer schema, and field-level inter-institution agreement comparison. The pilot deliberately preserves the out-of-band evidence boundary. See [`docs/external-institutional-pilot-v2.2.md`](docs/external-institutional-pilot-v2.2.md).
 
 ```bash
-PYTHONPATH=. python3 examples/pilot/pilot_proof.py
+PYTHONPATH=. python3 examples/institutional_pilot/pilot_proof.py
 ```
 
 ## Protocol API
@@ -104,7 +116,7 @@ The thin Protocol API exposes the frozen Evidence Core, Sentinel, and Observator
 
 ```bash
 pip install -e '.[api]'
-export CEREVIA_BUNDLE_PATH=examples/cross_domain/cross_domain_bundle.json
+export CEREVIA_BUNDLE_PATH=examples/substrate_stress_tests/cross_domain_bundle.json
 uvicorn cerevia.api:app --host 127.0.0.1 --port 8000
 ```
 
@@ -113,7 +125,7 @@ uvicorn cerevia.api:app --host 127.0.0.1 --port 8000
 The architecture is now frozen pending external validation. The repository includes a 30-minute quickstart, machine-readable readiness checklist, external result template, and readiness checker. Nine internal acceptance items are complete; **external institutional execution remains pending**. See [`docs/pilot/30-minute-quickstart.md`](docs/pilot/30-minute-quickstart.md) and [`docs/pilot/readiness.json`](docs/pilot/readiness.json).
 
 ```bash
-PYTHONPATH=. python3 examples/pilot/check_readiness.py
+PYTHONPATH=. python3 examples/institutional_pilot/check_readiness.py
 ```
 
 ## Run
@@ -121,19 +133,19 @@ PYTHONPATH=. python3 examples/pilot/check_readiness.py
 ```bash
 cd /home/ubuntu/cerevia
 python3 -m unittest discover -s tests -v
-PYTHONPATH=. python3 examples/bids_eeg/evidence_aware_analysis.py \
+PYTHONPATH=. python3 examples/neuro/evidence_aware_analysis.py \
   /path/to/ds003810/sub-02/eeg/sub-02_task-MIvsRest_run-0_eeg.edf
-PYTHONPATH=. python3 examples/bids_eeg/verify_bundle.py \
-  examples/bids_eeg/verification_bundle.json
-PYTHONPATH=. python3 examples/bids_eeg/observatory_query.py \
-  examples/bids_eeg/verification_bundle.json \
-  --sentinel examples/bids_eeg/sentinel_result.json
-PYTHONPATH=. python3 examples/proteomics/proteomics_proof.py \
-  examples/proteomics/data/hela_proteins_subset.csv
-PYTHONPATH=. python3 examples/earthspace/earthspace_proof.py \
-  examples/earthspace/data/usgs_earthquakes_2024-01-01_m5.json
-PYTHONPATH=. python3 examples/cross_domain/cross_domain_proof.py
-PYTHONPATH=. python3 examples/conformance/conformance_proof.py
+PYTHONPATH=. python3 examples/neuro/verify_bundle.py \
+  examples/neuro/verification_bundle.json
+PYTHONPATH=. python3 examples/neuro/observatory_query.py \
+  examples/neuro/verification_bundle.json \
+  --sentinel examples/neuro/sentinel_result.json
+PYTHONPATH=. python3 examples/transplants/proteomics_proof.py \
+  examples/transplants/data/hela_proteins_subset.csv
+PYTHONPATH=. python3 examples/transplants/earthspace_proof.py \
+  examples/transplants/data/usgs_earthquakes_2024-01-01_m5.json
+PYTHONPATH=. python3 examples/substrate_stress_tests/cross_domain_proof.py
+PYTHONPATH=. python3 examples/substrate_stress_tests/conformance_proof.py
 ```
 
 The real V1.0 proof uses OpenNeuro ds003810 EEG and its 68 EDF behavioral events. It exports the qualified claim chain and verifies it in a fresh Python process. Tests then corrupt an upstream payload, claim statement, and manifest to confirm that independent verification fails explicitly.

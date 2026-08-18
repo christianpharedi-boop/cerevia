@@ -2,7 +2,7 @@
 
 V2.0 tests whether the V1.6 Evidence Interoperability Specification is a protocol rather than only a CEREVIA implementation detail.
 
-The standalone implementation at [`examples/external_impl/standalone_protocol.py`](../examples/external_impl/standalone_protocol.py) intentionally does **not** import the `cerevia` package. It implements the protocol-visible rules using only the Python standard library: canonical JSON hashing, artifact content identity, parent references, manifest construction, evidence-graph hashing, serialized bundle verification, and downstream impact traversal.
+The standalone implementation at [`examples/substrate_stress_tests/standalone_protocol.py`](../examples/substrate_stress_tests/standalone_protocol.py) intentionally does **not** import the `cerevia` package. It implements the protocol-visible rules using only the Python standard library: canonical JSON hashing, artifact content identity, parent references, manifest construction, evidence-graph hashing, serialized bundle verification, and downstream impact traversal.
 
 ## Acceptance criteria
 
@@ -22,9 +22,9 @@ The external producer’s claim is deliberately a descriptive protocol fixture. 
 
 ```bash
 cd /home/ubuntu/cerevia
-python3 examples/external_impl/standalone_protocol.py produce examples/external_impl/external_bundle.json
-python3 examples/external_impl/standalone_protocol.py verify examples/external_impl/external_bundle.json
-PYTHONPATH=. python3 examples/bids_eeg/verify_bundle.py examples/external_impl/external_bundle.json
+python3 examples/substrate_stress_tests/standalone_protocol.py produce examples/substrate_stress_tests/external_bundle.json
+python3 examples/substrate_stress_tests/standalone_protocol.py verify examples/substrate_stress_tests/external_bundle.json
+PYTHONPATH=. python3 examples/neuro/verify_bundle.py examples/substrate_stress_tests/external_bundle.json
 PYTHONPATH=. python3 -m unittest tests.test_external_conformance -v
 ```
 

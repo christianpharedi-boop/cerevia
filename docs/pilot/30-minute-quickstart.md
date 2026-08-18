@@ -11,9 +11,9 @@ CEREVIA is a protocol for producing, exchanging, independently verifying, and tr
 | Item | Location |
 |---|---|
 | Frozen interoperability specification | [`docs/evidence-interoperability-v1.md`](../evidence-interoperability-v1.md) |
-| External implementation | [`examples/external_impl/standalone_protocol.py`](../../examples/external_impl/standalone_protocol.py) |
+| External implementation | [`examples/substrate_stress_tests/standalone_protocol.py`](../../examples/substrate_stress_tests/standalone_protocol.py) |
 | Institutional exchange profile | [`docs/institutional-exchange-v2.1.md`](../institutional-exchange-v2.1.md) |
-| Pilot proof and adversarial scenarios | [`examples/pilot/pilot_proof.py`](../../examples/pilot/pilot_proof.py) |
+| Pilot proof and adversarial scenarios | [`examples/institutional_pilot/pilot_proof.py`](../../examples/institutional_pilot/pilot_proof.py) |
 | Acceptance criteria and answer schema | [`docs/external-institutional-pilot-v2.2.md`](../external-institutional-pilot-v2.2.md) |
 | Readiness state | [`readiness.json`](readiness.json) |
 
@@ -38,6 +38,6 @@ The pilot is not considered complete until an external team independently execut
 
 ```bash
 cd /home/ubuntu/cerevia
-PYTHONPATH=. python3 examples/pilot/pilot_proof.py
+PYTHONPATH=. python3 examples/institutional_pilot/pilot_proof.py
 PYTHONPATH=. python3 -m unittest tests.test_pilot_kit -v
 ```

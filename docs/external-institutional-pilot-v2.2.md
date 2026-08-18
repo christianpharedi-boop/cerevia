@@ -42,7 +42,7 @@ The primary success criterion is **inter-institution agreement**: two independen
 
 ```bash
 cd /home/ubuntu/cerevia
-PYTHONPATH=. python3 examples/pilot/pilot_proof.py
+PYTHONPATH=. python3 examples/institutional_pilot/pilot_proof.py
 PYTHONPATH=. python3 -m unittest tests.test_pilot_kit -v
 ```
 

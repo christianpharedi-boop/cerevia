@@ -32,7 +32,7 @@ Install the API extras and start the read-only service:
 
 ```bash
 pip install -e '.[api]'
-export CEREVIA_BUNDLE_PATH=examples/cross_domain/cross_domain_bundle.json
+export CEREVIA_BUNDLE_PATH=examples/substrate_stress_tests/cross_domain_bundle.json
 uvicorn cerevia.api:app --host 127.0.0.1 --port 8000
 ```
 

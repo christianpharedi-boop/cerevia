@@ -10,7 +10,7 @@
   "final_content_hash": "082b6ca0adecf9b737780417bdbe58e2ec53965cca3f7a61aa733c1cd6055f31",
   "manifest_hash": "cc9fbcdad50e6593b499938bbc08170d34aa950c08de8967262d2a16c080fe64",
   "execution_identity": "5d0d47defd8bdeac2884281c31bc6f3ecac878a928bbb1e1b30926788bbb2a4a",
-  "bundle_path": "/home/ubuntu/cerevia/examples/bids_eeg/verification_bundle.json",
+  "bundle_path": "/home/ubuntu/cerevia/examples/neuro/verification_bundle.json",
   "independent_verification": {
     "verified": true,
     "checks": [

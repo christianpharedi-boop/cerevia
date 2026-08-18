@@ -3,7 +3,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Any
 import numpy as np
-from cerevia.acquisition.eeg import EEGObservation, ingest_eeg
+from cerevia.neuro.eeg import EEGObservation, ingest_eeg
 from cerevia.core.artifacts import ArtifactCatalog
 from cerevia.core.provenance import Artifact
 from cerevia.core.hashing import hash_object

@@ -1,7 +1,7 @@
 from __future__ import annotations
 import unittest
 
-from cerevia.acquisition.eeg import EEGObservation
+from cerevia.neuro.eeg import EEGObservation
 from cerevia.graph.evidence import EdgeType, EvidenceGraph, GraphNode, NodeType, project_evidence_graph
 from cerevia.pipeline import run_pipeline, verify_manifest
 from cerevia.study.ontology import NeuroscienceOntology, Participant, Session, Study

@@ -27,7 +27,7 @@ The V1.5 proof exercises selective revocation for neuroscience, proteomics, and 
 
 ```bash
 cd /home/ubuntu/cerevia
-PYTHONPATH=. python3 examples/cross_domain/cross_domain_proof.py
+PYTHONPATH=. python3 examples/substrate_stress_tests/cross_domain_proof.py
 ```
 
 The generated cross-domain bundle is a local proof artifact and is ignored by Git. Its source domain bundles remain independently verifiable inputs.

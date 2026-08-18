@@ -25,7 +25,7 @@ The raw artifact records the BIDS dataset identifier, relative source path, BIDS
 The interoperability example is:
 
 ```bash
-PYTHONPATH=. python3 examples/bids_eeg/ingest_openneuro.py \
+PYTHONPATH=. python3 examples/neuro/ingest_openneuro.py \
   /path/to/ds003810/sub-02/eeg/sub-02_task-MIvsRest_run-0_eeg.edf
 ```
 

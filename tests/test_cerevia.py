@@ -2,7 +2,7 @@ from __future__ import annotations
 import unittest
 import numpy as np
 
-from cerevia.acquisition.eeg import EEGObservation, ingest_eeg
+from cerevia.neuro.eeg import EEGObservation, ingest_eeg
 from cerevia.core.artifacts import ArtifactCatalog
 from cerevia.pipeline import QualityGateError, evidence_manifest, finding, qc_eeg, run_pipeline, verify_manifest
 

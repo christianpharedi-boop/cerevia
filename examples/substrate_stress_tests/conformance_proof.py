@@ -13,10 +13,10 @@ from cerevia.verification.bundle import write_bundle
 
 def main() -> int:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--neuroscience", type=Path, default=Path("examples/bids_eeg/verification_bundle.json"))
-    parser.add_argument("--proteomics", type=Path, default=Path("examples/proteomics/proteomics_bundle.json"))
-    parser.add_argument("--earthspace", type=Path, default=Path("examples/earthspace/earthspace_bundle.json"))
-    parser.add_argument("--output", type=Path, default=Path("examples/conformance/conformance_cross_domain_bundle.json"))
+    parser.add_argument("--neuroscience", type=Path, default=Path("examples/neuro/verification_bundle.json"))
+    parser.add_argument("--proteomics", type=Path, default=Path("examples/transplants/proteomics_bundle.json"))
+    parser.add_argument("--earthspace", type=Path, default=Path("examples/transplants/earthspace_bundle.json"))
+    parser.add_argument("--output", type=Path, default=Path("examples/substrate_stress_tests/conformance_cross_domain_bundle.json"))
     args = parser.parse_args()
     paths = {"neuroscience": args.neuroscience, "proteomics": args.proteomics, "earthspace": args.earthspace}
     bundles = {domain: load_bundle(path) for domain, path in paths.items()}

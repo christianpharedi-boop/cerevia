@@ -4,7 +4,7 @@ from pathlib import Path
 import unittest
 import numpy as np
 
-from cerevia.acquisition.eeg import EEGObservation, ingest_eeg
+from cerevia.neuro.eeg import EEGObservation, ingest_eeg
 from cerevia.core.artifacts import ArtifactCatalog
 from cerevia.graph.evidence import project_evidence_graph
 from cerevia.multimodal.evidence import BehavioralEvent, align_behavioral_events, ingest_behavioral_events, multimodal_analysis

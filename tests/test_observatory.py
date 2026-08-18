@@ -11,7 +11,7 @@ class ObservatoryTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
         root = Path(__file__).parents[1]
-        cls.snapshot = ObservatorySnapshot.from_files(root / "examples/bids_eeg/verification_bundle.json", root / "examples/bids_eeg/sentinel_result.json")
+        cls.snapshot = ObservatorySnapshot.from_files(root / "examples/neuro/verification_bundle.json", root / "examples/neuro/sentinel_result.json")
 
     def test_finding_and_verification_are_read_only_views(self):
         finding = self.snapshot.get_finding()
