@@ -32,3 +32,6 @@ examples/external_impl/external_bundle.json
 # Locally generated V2.1 institutional exchange artifacts
 examples/institutional_exchange/exchange_package.json
 examples/institutional_exchange/audit_log.json
+
+# Locally generated V2.2 pilot result
+examples/pilot/pilot_results.json

@@ -90,6 +90,14 @@ V2.1 defines the operational boundary for institution-to-institution exchange: s
 PYTHONPATH=. python3 examples/institutional_exchange/institutional_exchange_proof.py
 ```
 
+## V2.2 External Institutional Pilot
+
+V2.2 prepares the first external institutional experiment rather than claiming that one has already occurred. It provides a blind-exchange fixture, valid and adversarial package variants, a machine-readable answer schema, and field-level inter-institution agreement comparison. The pilot deliberately preserves the out-of-band evidence boundary. See [`docs/external-institutional-pilot-v2.2.md`](docs/external-institutional-pilot-v2.2.md).
+
+```bash
+PYTHONPATH=. python3 examples/pilot/pilot_proof.py
+```
+
 ## Run
 
 ```bash
