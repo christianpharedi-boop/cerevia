@@ -11,3 +11,7 @@ dist/
 # Locally generated real-data verification bundle
 examples/bids_eeg/verification_bundle.json
 examples/bids_eeg/sentinel_result.json
+
+# Locally generated V1.3 proteomics proof outputs
+examples/proteomics/proteomics_bundle.json
+examples/proteomics/proteomics_sentinel.json

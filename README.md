@@ -34,6 +34,17 @@ PYTHONPATH=. python3 examples/bids_eeg/observatory_query.py \
   --sentinel examples/bids_eeg/sentinel_result.json
 ```
 
+## V1.3 Proteomics Domain Transplant
+
+V1.3 tests whether the exact Evidence Core, Sentinel, and Observatory trust semantics survive a domain change. The proteomics adapter understands a public protein-expression assay, processing, quantification, and descriptive comparison; it does not create a second identity system, verifier, claim framework, mutable database, or evidence graph. See [`docs/proteomics-v1.3.md`](docs/proteomics-v1.3.md).
+
+The transplant proof uses the same 13 adversarial Sentinel attacks and the same Observatory `impact_of()` query used for neuroscience:
+
+```bash
+PYTHONPATH=. python3 examples/proteomics/proteomics_proof.py \\
+  examples/proteomics/data/hela_proteins_subset.csv
+```
+
 ## Run
 
 ```bash
@@ -46,6 +57,8 @@ PYTHONPATH=. python3 examples/bids_eeg/verify_bundle.py \
 PYTHONPATH=. python3 examples/bids_eeg/observatory_query.py \
   examples/bids_eeg/verification_bundle.json \
   --sentinel examples/bids_eeg/sentinel_result.json
+PYTHONPATH=. python3 examples/proteomics/proteomics_proof.py \
+  examples/proteomics/data/hela_proteins_subset.csv
 ```
 
 The real V1.0 proof uses OpenNeuro ds003810 EEG and its 68 EDF behavioral events. It exports the qualified claim chain and verifies it in a fresh Python process. Tests then corrupt an upstream payload, claim statement, and manifest to confirm that independent verification fails explicitly.
