@@ -46,12 +46,13 @@ def main(path: str) -> None:
         output_definitions={"mean_spectral_feature": {"type": "descriptive_mean", "unit": "arbitrary"}},
         uncertainty={"type": "not_estimated", "reason": "V0.8 declares uncertainty without overstating a confidence interval"},
         software_environment=fingerprint(),
-        expected_outputs=("aware-analysis-001", "aware-inference-001", "aware-finding-001"),
+        expected_outputs=("aware-analysis-001", "aware-inference-001", "aware-claim-001", "aware-finding-001"),
     )
     result = execute_evidence_aware_analysis(specification, catalog, "ds003810")
     output = {"dataset_id": run.dataset_id, "source_sha256": run.source_sha256, "behavioral_event_count": len(events),
               "specification_hash": result.specification_hash, "analysis_artifact_id": result.analysis_artifact_id,
-              "inference_artifact_id": result.inference_artifact_id, "finding_artifact_id": result.finding_artifact_id,
+              "inference_artifact_id": result.inference_artifact_id, "claim_artifact_id": result.claim_artifact_id,
+              "finding_artifact_id": result.finding_artifact_id,
               "final_content_hash": result.final_content_hash, "manifest_hash": result.manifest_hash,
               "execution_identity": result.execution_identity,
               "uncertainty": specification.to_dict()["uncertainty"]}

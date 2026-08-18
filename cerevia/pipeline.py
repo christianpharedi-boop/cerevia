@@ -94,7 +94,7 @@ def statistical_analysis(feature: Artifact, artifact_id: str, null_value: float 
 
 def finding(analysis: Artifact, evidence: tuple[Artifact, ...], artifact_id: str, statement: str,
             catalog: ArtifactCatalog | None = None) -> Artifact:
-    if analysis.kind not in {"analysis", "multimodal_analysis", "multimodal_inference"}:
+    if analysis.kind not in {"analysis", "multimodal_analysis", "multimodal_inference", "claim"}:
         raise ValueError("findings must reference an analysis artifact")
     if not evidence:
         raise ValueError("findings require at least one evidence artifact")
@@ -110,16 +110,18 @@ def finding(analysis: Artifact, evidence: tuple[Artifact, ...], artifact_id: str
         for item in evidence:
             if catalog.get(item.artifact_id).provenance.content_hash != item.provenance.content_hash:
                 raise ValueError("finding evidence content does not match the catalog artifact")
+    claim_status = analysis.payload.get("claim_status", "PROVISIONAL") if isinstance(analysis.payload, dict) else "PROVISIONAL"
     result = {"finding_id": artifact_id, "statement": statement, "evidence": [a.artifact_id for a in evidence],
               "evidence_content_hashes": [a.provenance.content_hash for a in evidence],
-              "analysis_id": analysis.artifact_id, "statistical_result": analysis.payload, "status": "PROVISIONAL"}
-    return Artifact.derive(artifact_id, "finding", result, {"status": "PROVISIONAL", "evidence_count": len(evidence)},
+              "analysis_id": analysis.artifact_id, "statistical_result": analysis.payload, "status": claim_status,
+              "claim_status": claim_status}
+    return Artifact.derive(artifact_id, "finding", result, {"status": claim_status, "evidence_count": len(evidence)},
                            "record_finding", (analysis,) + evidence, {"claim_policy": "computation_does_not_auto_convert_to_truth"})
 
 
 def evidence_manifest(study_id: str, final: Artifact, catalog: ArtifactCatalog, ontology: Any | None = None) -> dict[str, Any]:
     chain = catalog.lineage(final.artifact_id)
-    manifest = {"manifest_type": "CEREVIA EVIDENCE MANIFEST", "manifest_version": "0.8.0", "study_id": study_id,
+    manifest = {"manifest_type": "CEREVIA EVIDENCE MANIFEST", "manifest_version": "0.9.0", "study_id": study_id,
                 "final_finding_id": final.artifact_id, "artifact_count": len(chain),
                 "artifacts": [a.to_dict(include_payload=False) for a in chain],
                 "provenance_chain": [a.artifact_id for a in chain], "content_hash": final.provenance.content_hash}

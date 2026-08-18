@@ -37,7 +37,7 @@ class EvidenceAwareTests(unittest.TestCase):
             output_definitions={"effect": {"type": "descriptive", "unit": "arbitrary"}},
             uncertainty={"type": "not_estimated", "reason": "V0.8 proof declares uncertainty without overstating precision"},
             software_environment=env,
-            expected_outputs=("analysis-v08", "inference-v08", "finding-v08"),
+            expected_outputs=("analysis-v08", "inference-v08", "claim-v08", "finding-v08"),
         )
 
     def test_specification_requires_scientific_fields(self):
@@ -47,16 +47,18 @@ class EvidenceAwareTests(unittest.TestCase):
                 alignment_artifacts=self.specification.alignment_artifacts,
                 hypothesis="", experimental_conditions={"task": "dots"}, comparison={"left": "a"},
                 method="method", parameters={}, assumptions=("one",), output_definitions={"x": 1},
-                uncertainty={"type": "unknown"}, software_environment=fingerprint(), expected_outputs=("a", "b", "c"))
+                uncertainty={"type": "unknown"}, software_environment=fingerprint(), expected_outputs=("a", "b", "c", "d"))
 
     def test_execution_preserves_analysis_inference_and_uncertainty(self):
         result = execute_evidence_aware_analysis(self.specification, self.catalog, "study-v08")
         self.assertEqual(result.analysis_artifact_id, "analysis-v08")
         self.assertEqual(result.inference_artifact_id, "inference-v08")
+        self.assertEqual(result.claim_artifact_id, "claim-v08")
         self.assertEqual(result.finding_artifact_id, "finding-v08")
         graph = project_evidence_graph(self.catalog)
         self.assertEqual(graph.nodes["analysis-v08"].node_type, NodeType.ANALYSIS)
         self.assertEqual(graph.nodes["inference-v08"].node_type, NodeType.INFERENCE)
+        self.assertEqual(graph.nodes["claim-v08"].node_type, NodeType.CLAIM)
         self.assertTrue(any(edge.relation == EdgeType.INFERRED_FROM and edge.source == "inference-v08" for edge in graph.edges.values()))
         self.assertEqual(self.catalog.get("inference-v08").payload["uncertainty"]["type"], "not_estimated")
         self.assertIn("finding-v08", graph.findings_depending_on("behavior-v08"))
@@ -69,7 +71,7 @@ class EvidenceAwareTests(unittest.TestCase):
             comparison=self.specification.comparison, method=self.specification.method, parameters=self.specification.parameters,
             assumptions=self.specification.assumptions, output_definitions=self.specification.output_definitions,
             uncertainty=self.specification.uncertainty, software_environment=self.specification.software_environment,
-            expected_outputs=("analysis-t", "inference-t", "finding-t"))
+            expected_outputs=("analysis-t", "inference-t", "claim-t", "finding-t"))
         with self.assertRaises(ValueError):
             execute_evidence_aware_analysis(tampered, self.catalog)
 
@@ -85,7 +87,7 @@ class EvidenceAwareTests(unittest.TestCase):
             comparison=self.specification.comparison, method=self.specification.method, parameters=self.specification.parameters,
             assumptions=self.specification.assumptions, output_definitions=self.specification.output_definitions,
             uncertainty=self.specification.uncertainty, software_environment=self.specification.software_environment,
-            expected_outputs=("analysis-bad", "inference-bad", "finding-bad"))
+            expected_outputs=("analysis-bad", "inference-bad", "claim-bad", "finding-bad"))
         with self.assertRaises(ValueError):
             execute_evidence_aware_analysis(bad, self.catalog)
 

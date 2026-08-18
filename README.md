@@ -2,17 +2,17 @@
 
 **Evidence infrastructure for neuroscience.** CEREVIA records a computational path from immutable observations to provisional findings. It is not a replacement for EEG, MRI, behavioral, or physiological analysis libraries; it is the provenance and evidence layer those tools can build upon.
 
-## V0.8 Evidence-Aware Analysis
+## V0.9 Claim Validation
 
-CEREVIA now makes the scientific meaning of an analysis executable. An `EvidenceAwareAnalysisSpecification` declares exact input observations and alignments, hypothesis, experimental conditions, comparison, method, parameters, assumptions, output definitions, uncertainty, software environment, and expected outputs.
+CEREVIA now distinguishes a **computed result** from a **scientific claim**. A result is a value produced by a declared method. A claim is a qualified statement that may be created only after its inference, exact supporting evidence, assumptions, uncertainty, method, hypothesis, and experimental context have been validated.
 
 ```text
-OBSERVATION → TRANSFORMATION → FEATURE → ALIGNMENT → ANALYSIS → INFERENCE → FINDING
+OBSERVATION → TRANSFORMATION → FEATURE → ALIGNMENT → ANALYSIS → INFERENCE → CLAIM → FINDING
 ```
 
-The graph distinguishes `Analysis` from `Inference`. An inference is connected to its declared parents with `INFERRED_FROM` edges, while a finding supports the inference and preserves the complete evidence chain. Execution rejects changed input hashes, disconnected alignments, environment mismatches, incomplete output plans, and missing scientific semantics.
+Claim validation rejects missing evidence, invalid or disconnected inference, broken evidence content hashes, missing assumptions, missing uncertainty, missing context, and missing method. An explicit `not_estimated` uncertainty declaration yields a `QUALIFIED` claim rather than a false appearance of certainty. CEREVIA does not decide that a hypothesis is true; it verifies that a declared claim follows from declared computations under declared assumptions. See [`docs/claim-validation.md`](docs/claim-validation.md).
 
-The real V0.8 proof uses OpenNeuro ds003810 EEG and its 68 EDF behavioral events. It declares an alpha-band feature, shared recording-seconds context, descriptive comparison, assumptions, output definition, and a deliberate `not_estimated` uncertainty statement. See [`docs/evidence-aware.md`](docs/evidence-aware.md).
+The real V0.9 proof uses OpenNeuro ds003810 EEG and its 68 EDF behavioral events. It produces separate analysis, inference, claim, and finding artifacts and preserves the computed result independently inside the claim artifact.
 
 ## Run
 

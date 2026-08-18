@@ -8,6 +8,7 @@ from cerevia.core.artifacts import ArtifactCatalog
 from cerevia.core.environment import fingerprint
 from cerevia.core.hashing import freeze, hash_object, thaw
 from cerevia.core.provenance import Artifact
+from cerevia.analysis.claims import create_claim_artifact
 from cerevia.pipeline import evidence_manifest, finding
 
 
@@ -83,6 +84,7 @@ class EvidenceAwareResult:
     specification_hash: str
     analysis_artifact_id: str
     inference_artifact_id: str
+    claim_artifact_id: str
     finding_artifact_id: str
     final_content_hash: str
     manifest_hash: str
@@ -118,9 +120,9 @@ def execute_evidence_aware_analysis(specification: EvidenceAwareAnalysisSpecific
         if not parents.intersection({artifact.artifact_id for artifact in inputs}):
             raise ValueError(f"alignment {alignment.artifact_id} is disconnected from declared inputs")
     declared = thaw(specification.expected_outputs)
-    if len(declared) != 3:
-        raise ValueError("expected_outputs must contain analysis, inference, and finding IDs")
-    analysis_id, inference_id, finding_id = declared
+    if len(declared) != 4:
+        raise ValueError("expected_outputs must contain analysis, inference, claim, and finding IDs")
+    analysis_id, inference_id, claim_id, finding_id = declared
     analysis_payload = {
         "hypothesis": specification.hypothesis,
         "experimental_conditions": thaw(specification.experimental_conditions),
@@ -157,8 +159,13 @@ def execute_evidence_aware_analysis(specification: EvidenceAwareAnalysisSpecific
          "status": "PROVISIONAL"},
         "execute_evidence_aware_inference", parents=(analysis,) + inputs + alignments,
         parameters={"specification_hash": specification.specification_hash}))
+    claim = catalog.add(create_claim_artifact(
+        claim_id, inference, (analysis,) + inputs + alignments,
+        specification.hypothesis, specification.hypothesis,
+        tuple(specification.assumptions), thaw(specification.uncertainty),
+        thaw(specification.experimental_conditions), specification.method, catalog=catalog))
     final = catalog.add(finding(
-        inference, (analysis,) + inputs + alignments, finding_id,
+        claim, (claim, inference, analysis) + inputs + alignments, finding_id,
         specification.hypothesis, catalog=catalog))
     if catalog.validate_integrity():
         raise RuntimeError("evidence-aware analysis produced an integrity-invalid artifact graph")
@@ -169,5 +176,5 @@ def execute_evidence_aware_analysis(specification: EvidenceAwareAnalysisSpecific
         "finding_id": final.artifact_id, "final_content_hash": final.provenance.content_hash,
     })
     return EvidenceAwareResult(specification.specification_hash, analysis.artifact_id, inference.artifact_id,
-                               final.artifact_id, final.provenance.content_hash, manifest["manifest_hash"],
-                               execution_identity)
+                               claim.artifact_id, final.artifact_id, final.provenance.content_hash,
+                               manifest["manifest_hash"], execution_identity)
