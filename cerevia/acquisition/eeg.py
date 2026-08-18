@@ -6,6 +6,7 @@ import math
 import re
 import numpy as np
 from cerevia.core.provenance import Artifact
+from cerevia.study.ontology import Recording
 
 
 @dataclass(frozen=True)
@@ -55,11 +56,21 @@ def validate_observation_metadata(observation: EEGObservation, study_id: str, pa
         raise ValueError("invalid EEG metadata: " + "; ".join(errors))
 
 
-def ingest_eeg(artifact_id: str, observation: EEGObservation, study_id: str, participant_id: str, session_id: str) -> Artifact:
+def ingest_eeg(artifact_id: str, observation: EEGObservation, study_id: str, participant_id: str, session_id: str,
+               recording: Recording | None = None) -> Artifact:
     validate_observation_metadata(observation, study_id, participant_id, session_id)
-    return Artifact.derive(
-        artifact_id, "raw_eeg", observation.as_payload(),
-        {"study_id": study_id, "participant_id": participant_id, "session_id": session_id,
-         "immutable": True, "sampling_rate_hz": observation.sampling_rate_hz,
-         "channel_names": list(observation.channel_names)},
-        "ingest_eeg", parameters={"source_type": "EEGObservation"})
+    if recording is not None:
+        if recording.session_id != session_id or recording.modality.value != "EEG":
+            raise ValueError("EEG recording context must reference the same session and EEG modality")
+        if recording.sampling_rate_hz is not None and recording.sampling_rate_hz != observation.sampling_rate_hz:
+            raise ValueError("recording and observation sampling rates must match")
+        if tuple(channel.name for channel in recording.channels) != observation.channel_names:
+            raise ValueError("recording channel names must match the observation")
+    metadata = {"study_id": study_id, "participant_id": participant_id, "session_id": session_id,
+                "immutable": True, "sampling_rate_hz": observation.sampling_rate_hz,
+                "channel_names": list(observation.channel_names)}
+    if recording is not None:
+        metadata.update({"recording_id": recording.recording_id, "modality": recording.modality.value,
+                         "task": recording.task, "condition": recording.condition})
+    return Artifact.derive(artifact_id, "raw_eeg", observation.as_payload(), metadata,
+                           "ingest_eeg", parameters={"source_type": "EEGObservation", "ontology_bound": recording is not None})

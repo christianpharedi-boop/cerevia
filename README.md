@@ -2,15 +2,17 @@
 
 **Evidence infrastructure for neuroscience.** CEREVIA records a computational path from immutable observations to provisional findings. It is not a replacement for EEG, MRI, behavioral, or physiological analysis libraries; it is the provenance and evidence layer those tools can build upon.
 
-## V0.1.2 adversarial-integrity release
+## V0.2 Neuroscience Ontology
 
-This release deliberately tests the chain of custody rather than adding new neuroscience features. CEREVIA now detects or rejects raw-data mutation, transformation-parameter tampering, deleted ancestors, swapped parents, manifest tampering, altered environment metadata, unsupported findings, malformed EEG metadata, and stale findings reused against a new dataset.
+CEREVIA now has a domain layer that understands the experimental meaning surrounding a signal. The ontology models Study, pseudonymous Participant, Session, Recording, Modality, Channel, Event, Epoch, Feature, Analysis, and Finding. It preserves the context path:
 
-Artifact identities include the artifact content, operation, parameters, software version, environment fingerprint, and exact parent content hashes. Catalog validation recomputes those identities and reports integrity failures. Findings may only bind evidence from the exact referenced analysis lineage.
+```text
+participant + task + condition + event + recording → signal → analysis → finding
+```
 
-## V0.1 proof
+The V0.1.2 evidence core remains underneath and continues to enforce immutable artifacts, parent content hashes, environment fingerprints, catalog integrity validation, and independently hashed manifests. Ontology entities are append-only and require registered parents; EEG ingestion can bind a raw artifact to an ontology Recording and carry its task, condition, modality, and recording ID into provenance metadata.
 
-The first vertical slice is deliberately small: synthetic EEG → ingest → hash → QC → deterministic filter → epoch → alpha-band power → analysis → finding → machine-readable evidence manifest.
+The ontology contract is documented in [`docs/ontology.md`](docs/ontology.md).
 
 ## Run
 

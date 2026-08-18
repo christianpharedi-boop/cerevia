@@ -1,6 +1,6 @@
 {
   "manifest_type": "CEREVIA EVIDENCE MANIFEST",
-  "manifest_version": "0.1.2",
+  "manifest_version": "0.2.0",
   "study_id": "demo-001",
   "final_finding_id": "finding-001",
   "artifact_count": 7,
@@ -24,20 +24,21 @@
         "parent_artifacts": [],
         "operation": "ingest_eeg",
         "parameters": {
-          "source_type": "EEGObservation"
+          "source_type": "EEGObservation",
+          "ontology_bound": false
         },
-        "software_version": "0.1.2",
+        "software_version": "0.2.0",
         "environment": {
           "python_version": "3.12.3",
           "python_implementation": "CPython",
           "numpy_version": "2.5.1",
           "os": "Linux-6.1.102-x86_64-with-glibc2.39",
           "architecture": "x86_64",
-          "cerevia_version": "0.1.2",
+          "cerevia_version": "0.2.0",
           "python_executable": "/usr/bin/python3"
         },
-        "timestamp": "2026-08-18T16:58:52.936603+00:00",
-        "content_hash": "102abae1148bc77b17edfbcff254f0b0dd05fc61cdb6dffa60178b4f64d79b56",
+        "timestamp": "2026-08-18T17:05:57.217989+00:00",
+        "content_hash": "eab7bc1043a3a8cc06b8b0acca4fedde2ed7e6756808110f614fe885acc5e5e8",
         "creator": "cerevia"
       }
     },
@@ -56,18 +57,18 @@
         "parameters": {
           "policy": "finite_samples_and_minimum_shape"
         },
-        "software_version": "0.1.2",
+        "software_version": "0.2.0",
         "environment": {
           "python_version": "3.12.3",
           "python_implementation": "CPython",
           "numpy_version": "2.5.1",
           "os": "Linux-6.1.102-x86_64-with-glibc2.39",
           "architecture": "x86_64",
-          "cerevia_version": "0.1.2",
+          "cerevia_version": "0.2.0",
           "python_executable": "/usr/bin/python3"
         },
-        "timestamp": "2026-08-18T16:58:52.936864+00:00",
-        "content_hash": "a11e1088a2ee0563ff9f97fcdff0145fa305d17e637438da68aed7a3f7914d77",
+        "timestamp": "2026-08-18T17:05:57.218281+00:00",
+        "content_hash": "1dfaeac88c38d97a35dc6d2ad3427f709a83236e8522df0f1490312db485568d",
         "creator": "cerevia"
       }
     },
@@ -90,18 +91,18 @@
           "low_hz": 1.0,
           "high_hz": 40.0
         },
-        "software_version": "0.1.2",
+        "software_version": "0.2.0",
         "environment": {
           "python_version": "3.12.3",
           "python_implementation": "CPython",
           "numpy_version": "2.5.1",
           "os": "Linux-6.1.102-x86_64-with-glibc2.39",
           "architecture": "x86_64",
-          "cerevia_version": "0.1.2",
+          "cerevia_version": "0.2.0",
           "python_executable": "/usr/bin/python3"
         },
-        "timestamp": "2026-08-18T16:58:52.944970+00:00",
-        "content_hash": "0cc9786245b7fc3ef0794e1e1f4be46e071753a8837b507398d3edf3601bee5e",
+        "timestamp": "2026-08-18T17:05:57.227253+00:00",
+        "content_hash": "8081f854cdc39e9e178fe63dbe164477e3d6c1d64cbd42befa38b73000619289",
         "creator": "cerevia"
       }
     },
@@ -126,18 +127,18 @@
         "parameters": {
           "epoch_seconds": 1.0
         },
-        "software_version": "0.1.2",
+        "software_version": "0.2.0",
         "environment": {
           "python_version": "3.12.3",
           "python_implementation": "CPython",
           "numpy_version": "2.5.1",
           "os": "Linux-6.1.102-x86_64-with-glibc2.39",
           "architecture": "x86_64",
-          "cerevia_version": "0.1.2",
+          "cerevia_version": "0.2.0",
           "python_executable": "/usr/bin/python3"
         },
-        "timestamp": "2026-08-18T16:58:52.948014+00:00",
-        "content_hash": "878803b9a8a01ab77993434c6759a271f78c92e19dd0bb68e0734ed9871e0dfd",
+        "timestamp": "2026-08-18T17:05:57.230504+00:00",
+        "content_hash": "31b265c6ecd3e43f89ed05daf9958ae4dbe70b6335f5c59a5cdd3208a887fadf",
         "creator": "cerevia"
       }
     },
@@ -168,18 +169,18 @@
             12.0
           ]
         },
-        "software_version": "0.1.2",
+        "software_version": "0.2.0",
         "environment": {
           "python_version": "3.12.3",
           "python_implementation": "CPython",
           "numpy_version": "2.5.1",
           "os": "Linux-6.1.102-x86_64-with-glibc2.39",
           "architecture": "x86_64",
-          "cerevia_version": "0.1.2",
+          "cerevia_version": "0.2.0",
           "python_executable": "/usr/bin/python3"
         },
-        "timestamp": "2026-08-18T16:58:52.948414+00:00",
-        "content_hash": "83a94798d8fb869cf5f29da9af91a9f32e6944c04dff4495b5be22b7bb217335",
+        "timestamp": "2026-08-18T17:05:57.231022+00:00",
+        "content_hash": "a75afbe90bbeb625d5b70165e7a072776d02b7f4019c1d65e87d18ca8628d0a3",
         "creator": "cerevia"
       }
     },
@@ -198,18 +199,18 @@
         "parameters": {
           "null_value": 0.0
         },
-        "software_version": "0.1.2",
+        "software_version": "0.2.0",
         "environment": {
           "python_version": "3.12.3",
           "python_implementation": "CPython",
           "numpy_version": "2.5.1",
           "os": "Linux-6.1.102-x86_64-with-glibc2.39",
           "architecture": "x86_64",
-          "cerevia_version": "0.1.2",
+          "cerevia_version": "0.2.0",
           "python_executable": "/usr/bin/python3"
         },
-        "timestamp": "2026-08-18T16:58:52.948618+00:00",
-        "content_hash": "e7ee456e6730130739f4d62066f51b3bcc41c0ebacfebe0485e30f282fd8223c",
+        "timestamp": "2026-08-18T17:05:57.231250+00:00",
+        "content_hash": "a3ea15910b214fec7e1ec303b796bcd0092af9c716ba747865394302bddf8bfe",
         "creator": "cerevia"
       }
     },
@@ -234,18 +235,18 @@
         "parameters": {
           "claim_policy": "computation_does_not_auto_convert_to_truth"
         },
-        "software_version": "0.1.2",
+        "software_version": "0.2.0",
         "environment": {
           "python_version": "3.12.3",
           "python_implementation": "CPython",
           "numpy_version": "2.5.1",
           "os": "Linux-6.1.102-x86_64-with-glibc2.39",
           "architecture": "x86_64",
-          "cerevia_version": "0.1.2",
+          "cerevia_version": "0.2.0",
           "python_executable": "/usr/bin/python3"
         },
-        "timestamp": "2026-08-18T16:58:52.948768+00:00",
-        "content_hash": "a1f214e3593d2ed4684761a0b80960aaa36f7b3615c5487a1ec1a90aa061a197",
+        "timestamp": "2026-08-18T17:05:57.231417+00:00",
+        "content_hash": "0b4809d5764a708a0ada84b249c05cbdee0c61a3b2e222061bb67ceeece88f4d",
         "creator": "cerevia"
       }
     }
@@ -259,6 +260,6 @@
     "analysis-001",
     "finding-001"
   ],
-  "content_hash": "a1f214e3593d2ed4684761a0b80960aaa36f7b3615c5487a1ec1a90aa061a197",
-  "manifest_hash": "dd109051830e0a508fe91c783d7d88a88abf51237261b20456d9c9e1ba1dc9c8"
+  "content_hash": "0b4809d5764a708a0ada84b249c05cbdee0c61a3b2e222061bb67ceeece88f4d",
+  "manifest_hash": "a878a0072e552d7fabec9d663890de2c30c60517fbeebfa3745babac7c2123ac"
 }
