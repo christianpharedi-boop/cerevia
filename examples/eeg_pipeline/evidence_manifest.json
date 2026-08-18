@@ -1,0 +1,263 @@
+{
+  "manifest_type": "CEREVIA EVIDENCE MANIFEST",
+  "manifest_version": "0.1.1",
+  "study_id": "demo-001",
+  "final_finding_id": "finding-001",
+  "artifacts": [
+    {
+      "artifact_id": "raw-eeg-001",
+      "kind": "raw_eeg",
+      "metadata": {
+        "study_id": "demo-001",
+        "participant_id": "sub-001",
+        "session_id": "ses-01",
+        "immutable": true,
+        "sampling_rate_hz": 128.0,
+        "channel_names": [
+          "C3",
+          "C4"
+        ]
+      },
+      "provenance": {
+        "artifact_id": "raw-eeg-001",
+        "parent_artifacts": [],
+        "operation": "ingest_eeg",
+        "parameters": {
+          "source_type": "EEGObservation"
+        },
+        "software_version": "0.1.1",
+        "environment": {
+          "python_version": "3.12.3",
+          "python_implementation": "CPython",
+          "numpy_version": "2.5.1",
+          "os": "Linux-6.1.102-x86_64-with-glibc2.39",
+          "architecture": "x86_64",
+          "cerevia_version": "0.1.1",
+          "python_executable": "/usr/bin/python3"
+        },
+        "timestamp": "2026-08-18T16:48:37.596432+00:00",
+        "content_hash": "72784f70e0684e0a6ea639733538da9d52feeb8d63bfc789a55380d56dc530f9",
+        "creator": "cerevia"
+      }
+    },
+    {
+      "artifact_id": "qc-001",
+      "kind": "qc_report",
+      "metadata": {
+        "quality_gate": true
+      },
+      "provenance": {
+        "artifact_id": "qc-001",
+        "parent_artifacts": [
+          "raw-eeg-001"
+        ],
+        "operation": "quality_control",
+        "parameters": {
+          "policy": "finite_samples_and_minimum_shape"
+        },
+        "software_version": "0.1.1",
+        "environment": {
+          "python_version": "3.12.3",
+          "python_implementation": "CPython",
+          "numpy_version": "2.5.1",
+          "os": "Linux-6.1.102-x86_64-with-glibc2.39",
+          "architecture": "x86_64",
+          "cerevia_version": "0.1.1",
+          "python_executable": "/usr/bin/python3"
+        },
+        "timestamp": "2026-08-18T16:48:37.596667+00:00",
+        "content_hash": "b0676c3c321d7bac4de7e5065fc6bf9fcc3a7e7f6908687644b3e29e643c3e2a",
+        "creator": "cerevia"
+      }
+    },
+    {
+      "artifact_id": "filter-001",
+      "kind": "filtered_eeg",
+      "metadata": {
+        "filter": "ideal_fft_bandpass",
+        "low_hz": 1.0,
+        "high_hz": 40.0
+      },
+      "provenance": {
+        "artifact_id": "filter-001",
+        "parent_artifacts": [
+          "raw-eeg-001",
+          "qc-001"
+        ],
+        "operation": "filter_eeg",
+        "parameters": {
+          "low_hz": 1.0,
+          "high_hz": 40.0
+        },
+        "software_version": "0.1.1",
+        "environment": {
+          "python_version": "3.12.3",
+          "python_implementation": "CPython",
+          "numpy_version": "2.5.1",
+          "os": "Linux-6.1.102-x86_64-with-glibc2.39",
+          "architecture": "x86_64",
+          "cerevia_version": "0.1.1",
+          "python_executable": "/usr/bin/python3"
+        },
+        "timestamp": "2026-08-18T16:48:37.604048+00:00",
+        "content_hash": "6eb56c75eea14c65aa8c4516961666cd379fcbe93aa5e755172e08d516ba6e79",
+        "creator": "cerevia"
+      }
+    },
+    {
+      "artifact_id": "epoch-001",
+      "kind": "eeg_epochs",
+      "metadata": {
+        "epoch_seconds": 1.0,
+        "sampling_rate_hz": 128.0,
+        "epoch_count": 8,
+        "channel_names": [
+          "C3",
+          "C4"
+        ]
+      },
+      "provenance": {
+        "artifact_id": "epoch-001",
+        "parent_artifacts": [
+          "filter-001"
+        ],
+        "operation": "epoch_eeg",
+        "parameters": {
+          "epoch_seconds": 1.0
+        },
+        "software_version": "0.1.1",
+        "environment": {
+          "python_version": "3.12.3",
+          "python_implementation": "CPython",
+          "numpy_version": "2.5.1",
+          "os": "Linux-6.1.102-x86_64-with-glibc2.39",
+          "architecture": "x86_64",
+          "cerevia_version": "0.1.1",
+          "python_executable": "/usr/bin/python3"
+        },
+        "timestamp": "2026-08-18T16:48:37.606199+00:00",
+        "content_hash": "f164b4bfb5e0080a7e35863cb44dfee33c356a7ecdb5de5bb4237340a858d3d6",
+        "creator": "cerevia"
+      }
+    },
+    {
+      "artifact_id": "alpha-power-001",
+      "kind": "spectral_power",
+      "metadata": {
+        "band_hz": [
+          8.0,
+          12.0
+        ],
+        "metric": "mean_fft_power",
+        "channel_names": [
+          "C3",
+          "C4"
+        ],
+        "epoch_count": 8
+      },
+      "provenance": {
+        "artifact_id": "alpha-power-001",
+        "parent_artifacts": [
+          "epoch-001"
+        ],
+        "operation": "extract_spectral_power",
+        "parameters": {
+          "band_hz": [
+            8.0,
+            12.0
+          ]
+        },
+        "software_version": "0.1.1",
+        "environment": {
+          "python_version": "3.12.3",
+          "python_implementation": "CPython",
+          "numpy_version": "2.5.1",
+          "os": "Linux-6.1.102-x86_64-with-glibc2.39",
+          "architecture": "x86_64",
+          "cerevia_version": "0.1.1",
+          "python_executable": "/usr/bin/python3"
+        },
+        "timestamp": "2026-08-18T16:48:37.606561+00:00",
+        "content_hash": "542a70a6c84cded6026ddf65dc2f53db1532e469ddc12f3ccd01e1fbffc778a1",
+        "creator": "cerevia"
+      }
+    },
+    {
+      "artifact_id": "analysis-001",
+      "kind": "analysis",
+      "metadata": {
+        "analysis_type": "one_sample_descriptive_t_statistic"
+      },
+      "provenance": {
+        "artifact_id": "analysis-001",
+        "parent_artifacts": [
+          "alpha-power-001"
+        ],
+        "operation": "statistical_analysis",
+        "parameters": {
+          "null_value": 0.0
+        },
+        "software_version": "0.1.1",
+        "environment": {
+          "python_version": "3.12.3",
+          "python_implementation": "CPython",
+          "numpy_version": "2.5.1",
+          "os": "Linux-6.1.102-x86_64-with-glibc2.39",
+          "architecture": "x86_64",
+          "cerevia_version": "0.1.1",
+          "python_executable": "/usr/bin/python3"
+        },
+        "timestamp": "2026-08-18T16:48:37.606733+00:00",
+        "content_hash": "622bf7dbaec2f0d218cb01393c18323cfeb12c509734720868f448fa7d1b7c45",
+        "creator": "cerevia"
+      }
+    },
+    {
+      "artifact_id": "finding-001",
+      "kind": "finding",
+      "metadata": {
+        "status": "PROVISIONAL",
+        "evidence_count": 5
+      },
+      "provenance": {
+        "artifact_id": "finding-001",
+        "parent_artifacts": [
+          "analysis-001",
+          "raw-eeg-001",
+          "qc-001",
+          "filter-001",
+          "epoch-001",
+          "alpha-power-001"
+        ],
+        "operation": "record_finding",
+        "parameters": {
+          "claim_policy": "computation_does_not_auto_convert_to_truth"
+        },
+        "software_version": "0.1.1",
+        "environment": {
+          "python_version": "3.12.3",
+          "python_implementation": "CPython",
+          "numpy_version": "2.5.1",
+          "os": "Linux-6.1.102-x86_64-with-glibc2.39",
+          "architecture": "x86_64",
+          "cerevia_version": "0.1.1",
+          "python_executable": "/usr/bin/python3"
+        },
+        "timestamp": "2026-08-18T16:48:37.606803+00:00",
+        "content_hash": "379fd309f84a58da9f0b812e777813bdaea9333fa897ec7227fa54521198d87f",
+        "creator": "cerevia"
+      }
+    }
+  ],
+  "provenance_chain": [
+    "raw-eeg-001",
+    "qc-001",
+    "filter-001",
+    "epoch-001",
+    "alpha-power-001",
+    "analysis-001",
+    "finding-001"
+  ],
+  "content_hash": "379fd309f84a58da9f0b812e777813bdaea9333fa897ec7227fa54521198d87f",
+  "manifest_hash": "9e82479f77adf8982e3a66ebacd3d34194091538e9cc1b5b7bcdc245bae4609e"
+}

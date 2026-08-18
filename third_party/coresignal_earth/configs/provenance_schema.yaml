@@ -1,0 +1,44 @@
+provenance:
+  required:
+    - source_id
+    - domain
+    - provider
+    - dataset_name
+    - status
+    - source_reference
+    - access_date
+    - license
+    - time_coverage
+    - sampling_interval
+    - units
+    - reference_frame
+
+status:
+  allowed:
+    - planned
+    - discovered
+    - metadata_verified
+    - acquired
+    - hashed
+    - parsed
+    - quality_checked
+    - admitted
+    - rejected
+
+integrity:
+  required_for:
+    - acquired
+    - hashed
+    - parsed
+    - quality_checked
+    - admitted
+  fields:
+    - sha256
+    - byte_size
+
+admission:
+  required:
+    - provenance_complete
+    - parser_passed
+    - quality_control_passed
+    - integrity_verified
