@@ -2,6 +2,10 @@
 
 This index is intentionally ordered for a neuroscience researcher approaching CEREVIA for the first time. The EEG/BIDS provenance path is the flagship demonstration; the remaining sections explain the frozen substrate, its implementation-independent contracts, and the tests that show the same trust semantics survive outside neuroscience.
 
+## Architecture contract
+
+Read [Architecture](architecture.md) before adding a new package or adapter. It defines the trust-substrate/application split, establishes `cerevia.neuro` as the flagship namespace, identifies `cerevia.adapters` as the external-domain boundary, documents the lazy BIDS dependency, and describes legacy import paths as compatibility surfaces rather than canonical APIs.
+
 ## 1. Neuroscience story
 
 These documents explain the concrete EEG/BIDS problem and the evidence path from acquisition artifacts to independently verifiable claims.

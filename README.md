@@ -14,6 +14,8 @@ python3 examples/neuro/quickstart.py
 
 Then explore the [BIDS/EEG guide](docs/bids-eeg.md), [reproducibility guide](docs/reproducibility.md), and [claim validation guide](docs/claim-validation.md). CEREVIA's trust architecture has also been tested against proteomics and Earth/Space data as substrate transplant tests; those secondary demonstrations are indexed in [`docs/README.md`](docs/README.md).
 
+The repository boundary is explicit: `cerevia.core` and the Sentinel, Observatory, and Interoperability layers are domain-neutral; `cerevia.neuro` is the flagship neuroscience namespace; `cerevia.adapters` contains external-domain implementations; and legacy import paths are compatibility surfaces rather than canonical APIs. See the [Architecture Contract](docs/architecture.md) before adding a new package or adapter.
+
 ## V1.0 Independent Verification
 
 CEREVIA V1.0 answers a focused question: **Can an independent researcher verify the evidence-to-claim chain without access to the original in-memory execution state?**

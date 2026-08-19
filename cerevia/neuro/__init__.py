@@ -4,5 +4,5 @@ from .eeg import EEGObservation, ingest_eeg
 
 __all__ = ["EEGObservation", "ingest_eeg"]
 
-__version__ = "2.3.0"
+__version__ = "2.4.0"
 
