@@ -10,6 +10,7 @@ from fastapi import FastAPI, HTTPException, Query
 from pydantic import BaseModel, Field
 
 from cerevia.observatory import ObservatorySnapshot
+from cerevia.sentinel.security import verify_sentinel_payload
 from cerevia.verification.bundle import verify_bundle
 
 
@@ -42,7 +43,7 @@ class ReadOnlyStore:
 
 def _snapshot_or_404(store: ReadOnlyStore, finding_id: str | None = None) -> ObservatorySnapshot:
     snapshot = store.snapshot()
-    if finding_id and finding_id not in snapshot._graph.nodes:  # read-only existence check
+    if finding_id and not snapshot.contains(finding_id):
         raise HTTPException(status_code=404, detail=f"Unknown artifact or finding: {finding_id}")
     return snapshot
 
@@ -60,6 +61,8 @@ def create_app(store: ReadOnlyStore | None = None) -> FastAPI:
     read_store = store or ReadOnlyStore(os.getenv("CEREVIA_BUNDLE_PATH"), os.getenv("CEREVIA_SENTINEL_PATH"))
     api = FastAPI(title="CEREVIA Protocol API", version="2.3.0", description="Read-mostly HTTP interface over Evidence Core, Sentinel, and Observatory. It does not store or rewrite scientific evidence.")
 
+    # TODO(v3): add authenticated access, authorization, and audit policy before
+    # exposing this boundary beyond controlled pre-pilot validation.
     @api.get("/health")
     def health() -> dict[str, Any]:
         return {"service": "cerevia-protocol-api", "status": "ready", "storage": "read_only_out_of_band", "institutional_exchange_api": "separate_future_boundary"}
@@ -67,11 +70,10 @@ def create_app(store: ReadOnlyStore | None = None) -> FastAPI:
     @api.post("/verify")
     @api.post("/verify/bundle")
     def verify(request: VerifyRequest) -> dict[str, Any]:
-        report = verify_bundle(request.bundle).to_dict()
-        if request.sentinel:
-            report["sentinel_status"] = request.sentinel.get("sentinel_status")
-            report["attestation_verified"] = request.sentinel.get("attestation_verified")
-            report["transparency_log_verified"] = request.sentinel.get("transparency_log_verified")
+        bundle_report = verify_bundle(request.bundle)
+        report = bundle_report.to_dict()
+        if request.sentinel is not None:
+            report["sentinel"] = verify_sentinel_payload(request.bundle, request.sentinel, bundle_report)
         return report
 
     @api.get("/findings/{finding_id}")
@@ -93,7 +95,7 @@ def create_app(store: ReadOnlyStore | None = None) -> FastAPI:
     def finding_verification(finding_id: str) -> dict[str, Any]:
         snapshot = _snapshot_or_404(read_store, finding_id)
         _query(snapshot.get_finding, finding_id)
-        return snapshot.get_verification()
+        return _query(snapshot.get_verification, finding_id)
 
     @api.get("/findings/{finding_id}/history")
     def finding_history(finding_id: str, as_of: str | None = Query(default=None)) -> dict[str, Any]:

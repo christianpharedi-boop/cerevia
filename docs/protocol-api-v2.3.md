@@ -26,6 +26,12 @@ The API reads configured protocol artifacts from an out-of-band bundle path or v
 
 The query endpoints require `CEREVIA_BUNDLE_PATH` and optionally `CEREVIA_SENTINEL_PATH`. They load the configured files per request. The verification endpoints accept a JSON body shaped as `{ "bundle": {...}, "sentinel": {...} }` and perform transient verification.
 
+When a Sentinel payload is supplied, client-provided summary fields are returned only under `sentinel.client_reported`. They are never emitted as server-verified top-level fields. The API independently verifies the signed attestation, binds it to the submitted bundle and specification, and verifies the hash-linked transparency log; those results appear under `sentinel.server_verified`.
+
+`GET /findings/{id}/verification` returns a bundle verification report explicitly scoped to the requested finding lineage. The frozen verifier still validates the serialized bundle as a whole; the response names that scope rather than implying a separate verifier for one artifact.
+
+Authentication is intentionally not implemented in this pre-pilot read-only boundary. The `/health` response identifies `institutional_exchange_api` as a separate future boundary. Before deployment beyond controlled validation, a future release must add authenticated access, authorization policy, and audit requirements without placing credentials or sensitive scientific payloads in the trust layer.
+
 ## Run locally
 
 Install the API extras and start the read-only service:

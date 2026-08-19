@@ -10,7 +10,7 @@ from typing import Any
 
 from cerevia.core.hashing import hash_object
 from cerevia.graph.evidence import EdgeType, EvidenceGraph, GraphEdge, GraphNode, NodeType
-from cerevia.sentinel.security import RevocationRecord, SentinelEvent
+from cerevia.sentinel.security import RevocationRecord, SentinelEvent, verify_sentinel_payload
 from cerevia.verification.bundle import VerificationReport, verify_bundle
 
 
@@ -78,6 +78,10 @@ class ObservatorySnapshot:
     @property
     def final_finding_id(self) -> str | None:
         return self._bundle.get("manifest", {}).get("final_finding_id")
+
+    def contains(self, node_id: str) -> bool:
+        """Return whether a protocol node is present in this read-only snapshot."""
+        return node_id in self._graph.nodes
 
     def _record(self, node_id: str) -> dict[str, Any] | None:
         for record in self._bundle.get("artifacts", []):
@@ -159,12 +163,28 @@ class ObservatorySnapshot:
             evidence.append(item)
         return {"claim_id": identifier, "claim": record, "evidence": evidence}
 
-    def get_verification(self) -> dict[str, Any]:
+    def get_verification(self, finding_id: str | None = None) -> dict[str, Any]:
+        """Return verification scoped to a finding lineage within this bundle.
+
+        The frozen verifier validates the serialized bundle as a whole. When a
+        finding ID is supplied, this method additionally proves that the
+        requested finding exists and resolves its lineage, while naming the
+        bundle scope explicitly instead of implying a separate single-finding
+        verifier.
+        """
         result = self._verification.to_dict()
-        if self._sentinel:
-            result["sentinel_status"] = self._sentinel.get("sentinel_status")
-            result["attestation_verified"] = self._sentinel.get("attestation_verified")
-            result["transparency_log_verified"] = self._sentinel.get("transparency_log_verified")
+        if finding_id is not None:
+            record = self._record(finding_id)
+            if not record or record.get("kind") != "finding":
+                raise KeyError(finding_id)
+            result = {
+                "finding_id": finding_id,
+                "verification_scope": "finding_lineage_within_bundle",
+                "lineage_node_ids": self._lineage_ids(finding_id),
+                "bundle_verification": result,
+                "verified": self._verification.verified,
+            }
+        result["sentinel"] = verify_sentinel_payload(self._bundle, self._sentinel, self._verification)
         return result
 
     def get_attestations(self, subject_id: str | None = None) -> list[dict[str, Any]]:
@@ -213,7 +233,10 @@ class ObservatorySnapshot:
         for record in self._revocations():
             if node_id in record.get("affected_nodes", []):
                 return "AFFECTED / INVESTIGATE"
-        return self._sentinel.get("sentinel_status") or ("VERIFIED" if self._verification.verified else "INVESTIGATE")
+        sentinel = verify_sentinel_payload(self._bundle, self._sentinel, self._verification)
+        if sentinel["server_verified"]["sentinel_verified"] or self._verification.verified:
+            return "VERIFIED"
+        return "INVESTIGATE"
 
     @staticmethod
     def _edge(edge: GraphEdge) -> dict[str, Any]:

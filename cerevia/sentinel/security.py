@@ -148,6 +148,53 @@ def verify_attestation(attestation: SignedAttestation) -> bool:
         return False
 
 
+def verify_sentinel_payload(bundle: dict[str, Any], sentinel: dict[str, Any], bundle_report: VerificationReport) -> dict[str, Any]:
+    """Return server-derived Sentinel status without trusting client flags.
+
+    Sentinel result files may contain useful client-reported summaries, but the
+    API must never present those summaries as independently verified facts.
+    This helper verifies the signed attestation, binds it to this bundle and
+    specification, and verifies the hash-linked transparency log.
+    """
+    client_reported = {
+        key: copy.deepcopy(sentinel[key])
+        for key in ("sentinel_status", "attestation_verified", "transparency_log_verified", "original_verification")
+        if key in sentinel
+    }
+    attestation_verified = False
+    attestation_binding_verified = False
+    attestation_data = sentinel.get("attestation")
+    if isinstance(attestation_data, dict):
+        try:
+            attestation = SignedAttestation(**copy.deepcopy(attestation_data))
+            attestation_verified = verify_attestation(attestation)
+            attestation_binding_verified = (
+                attestation.subject_bundle_hash == hash_object(bundle)
+                and attestation.specification_hash == bundle.get("specification_hash")
+                and attestation.verification_result == ("VERIFIED" if bundle_report.verified else "INVESTIGATE")
+            )
+        except (TypeError, ValueError):
+            pass
+
+    transparency_log_verified = False
+    log_data = sentinel.get("transparency_log")
+    if isinstance(log_data, dict) and isinstance(log_data.get("events"), list):
+        try:
+            events = tuple(SentinelEvent(**copy.deepcopy(item)) for item in log_data["events"])
+            log = TransparencyLog(events)
+            transparency_log_verified = log.verify() and log_data.get("log_hash") == hash_object([event.__dict__ for event in events])
+        except (TypeError, ValueError):
+            pass
+
+    server_verified = {
+        "bundle_verified": bundle_report.verified,
+        "attestation_verified": attestation_verified and attestation_binding_verified,
+        "transparency_log_verified": transparency_log_verified,
+    }
+    server_verified["sentinel_verified"] = all(server_verified.values())
+    return {"client_reported": client_reported, "server_verified": server_verified}
+
+
 @dataclass(frozen=True)
 class AttackResult:
     attack: str
